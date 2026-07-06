@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"name": "quantum computer",
+			"path": ".."
+		},
+		{
+			"path": "../../vscode/test_code"
+		}
+	],
+	"settings": {
+		"files.autoSave": "afterDelay"
+	}
+}
