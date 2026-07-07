@@ -44,7 +44,7 @@ scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).textur
 // 2. Controls (Mouse se ghumane ke liye)
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = false;
-controls.dampingFactor = 0.5;
+controls.dampingFactor = 0.7;
 
 // 3. Lighting
 const ambientLight = new THREE.AmbientLight('#ffffff', 0.8);
@@ -58,6 +58,7 @@ scene.add(dirLight);
 //DILUTION REFRIGERATOR GROUP
 const dfgroup = new THREE.Group();
 scene.add(dfgroup);
+dfgroup.position.set(-6,0.5,0);
 
 
 
@@ -100,49 +101,49 @@ function goldplate(r, hasHoles = false) {
     // ==========================================
     // CSG SPHERICAL INCISIONS (TOP AND BOTTOM)
     // ==========================================
-    const incisionRadius = 0.05;
-    const spacing = 0.45; // Distance between incisions
+    // const incisionRadius = 0.05;
+    // const spacing = 0.45; // Distance between incisions
 
-    // Base plate brush
-    const plateBrush = new Brush(geometry);
-    plateBrush.updateMatrixWorld();
+    // // Base plate brush
+    // const plateBrush = new Brush(geometry);
+    // plateBrush.updateMatrixWorld();
 
-    // Create a base cutter sphere
-    const baseSphereGeo = new THREE.SphereGeometry(incisionRadius,6,6);
-    const cutterGeometries = [];
+    // // Create a base cutter sphere
+    // const baseSphereGeo = new THREE.SphereGeometry(incisionRadius,6,6);
+    // const cutterGeometries = [];
 
-    // Generate grid of spherical incisions
-    for (let x = -r; x <= r; x += spacing) {
-        for (let y = -r; y <= r; y += spacing) {
-            // Keep incisions inside the radius (with a small margin so they don't clip the edges)
-            if (x * x + y * y < (r - 0.2) * (r - 0.2)) {
-                // Top spherical incision (centered at z = depth)
-                const topSphere = baseSphereGeo.clone();
-                topSphere.translate(x, y, extrudesettings.depth);
-                cutterGeometries.push(topSphere);
+    // // Generate grid of spherical incisions
+    // for (let x = -r; x <= r; x += spacing) {
+    //     for (let y = -r; y <= r; y += spacing) {
+    //         // Keep incisions inside the radius (with a small margin so they don't clip the edges)
+    //         if (x * x + y * y < (r - 0.2) * (r - 0.2)) {
+    //             // Top spherical incision (centered at z = depth)
+    //             const topSphere = baseSphereGeo.clone();
+    //             topSphere.translate(x, y, extrudesettings.depth);
+    //             cutterGeometries.push(topSphere);
 
-                // Bottom spherical incision (centered at z = 0)
-                const botSphere = baseSphereGeo.clone();
-                botSphere.translate(x, y, 0);
-                cutterGeometries.push(botSphere);
-            }
-        }
-    }
+    //             // Bottom spherical incision (centered at z = 0)
+    //             const botSphere = baseSphereGeo.clone();
+    //             botSphere.translate(x, y, 0);
+    //             cutterGeometries.push(botSphere);
+    //         }
+    //     }
+    // }
 
-    // Evaluate the CSG Subtraction if we have cutters
-    if (cutterGeometries.length > 0) {
-        const mergedCutters = BufferGeometryUtils.mergeGeometries(cutterGeometries);
-        const cutterBrush = new Brush(mergedCutters);
-        cutterBrush.updateMatrixWorld();
+    // // Evaluate the CSG Subtraction if we have cutters
+    // if (cutterGeometries.length > 0) {
+    //     const mergedCutters = BufferGeometryUtils.mergeGeometries(cutterGeometries);
+    //     const cutterBrush = new Brush(mergedCutters);
+    //     cutterBrush.updateMatrixWorld();
 
-        const evaluator = new Evaluator();
-        const result = evaluator.evaluate(plateBrush, cutterBrush, SUBTRACTION);
+    //     const evaluator = new Evaluator();
+    //     const result = evaluator.evaluate(plateBrush, cutterBrush, SUBTRACTION);
 
-        // Replace our starting geometry with the CSG result
-        evaluator.useGroups = false;
-        geometry.dispose(); 
-        geometry = result.geometry;
-    }
+    //     // Replace our starting geometry with the CSG result
+    //     evaluator.useGroups = false;
+    //     geometry.dispose(); 
+    //     geometry = result.geometry;
+    // }
     // // ==========================================
 
     const material = new THREE.MeshStandardMaterial({color: 0xd4af37, side: THREE.DoubleSide, roughness: 0.15, metalness: 1});
@@ -192,11 +193,11 @@ function df_pipe(r,d, x, y, z) {
 
 //df pipes
 
-df_pipe(0.15, 11.5, 0.92, 0, -0.74);
+df_pipe(0.15, 11.4, 0.92, 0, -0.74);
 df_pipe(0.2, 0.1, 0.92, 0, -0.74);
 
-df_pipe(0.16, 11.5, -1.04, 0, 0.77);
-df_pipe(0.16, 11.5, 0.95, 0, 0.79);
+df_pipe(0.16, 11.4, -1.04, 0, 0.77);
+df_pipe(0.16, 11.4, 0.95, 0, 0.79);
 
 df_pipe(0.23, 0.1, -1.04, 0, 0.77);
 df_pipe(0.23, 0.1, 0.95, 0, 0.75);
@@ -216,7 +217,7 @@ function top_flange(r) {
     
     //creating the mesh
     const geometry = new THREE.ExtrudeGeometry(df_flange_plate, extrudesettings);
-    const material = new THREE.MeshStandardMaterial({color: 0xd4af37, side: THREE.DoubleSide, roughness: 0.15, metalness: 1});
+    const material = new THREE.MeshStandardMaterial({color: 0x353E43, side: THREE.DoubleSide, roughness: 0.15, metalness: 1});
     const mesh = new THREE.Mesh(geometry, material);
 
     dfgroup.add(mesh);
@@ -988,7 +989,7 @@ function createBolt(radius, numBolts, x, y, z) {
         clone.position.z = Math.sin(angle) * radius;
         cloneGroup.add(clone);
         cloneGroup.position.set(x,y,z);
-        scene.add(cloneGroup);
+        dfgroup.add(cloneGroup);
     }
 }
 
@@ -1426,7 +1427,7 @@ for(let i = 0; i < 8; i++){
 
 const cryocase = new THREE.Group();
 const material = new THREE.MeshStandardMaterial({ color: 0xb87333, side: THREE.DoubleSide, metalness: 1, roughness: 0.15});
-scene.add(cryocase)
+// scene.add(cryocase)
 
 // Define structural tiers: [outerRadius, innerRadius, depth/height]
 const tiers = [
@@ -1764,8 +1765,8 @@ const legGeo = new THREE.BoxGeometry(0.3, 8, 0.3);
 const footPadGeo = new THREE.CylinderGeometry(0.25, 0.25, 0.1, 32);
 const footSpindleGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.3, 16);
 const legPositions = [
-    { x: -2, z: -2 }, { x: 2, z: -2 },
-    { x: -2, z: 2 },  { x: 2, z: 2 }
+    { x: -2, z: -2 }, { x: 4, z: -2 },
+    { x: -2, z: 2 },  { x: 4, z: 2 }
 ];
 
 legPositions.forEach(pos => {
@@ -1786,35 +1787,33 @@ legPositions.forEach(pos => {
 });
 
 // 2. MAIN HEADER BED & JOINT GUSSETS
-const longHeaderGeo = new THREE.BoxGeometry(4.5, 0.8, 0.3);
-const shortHeaderGeo = new THREE.BoxGeometry(0.3, 0.8, 4.0);
+const longHeaderGeo = new THREE.BoxGeometry(6.5, 0.5, 0.4);
+const shortHeaderGeo = new THREE.BoxGeometry(0.4, 0.5, 4.5);
 
-const h1 = new THREE.Mesh(longHeaderGeo, darkFrameMaterial); h1.position.set(0, 7.6, 2); standGroup.add(h1);
-const h2 = new THREE.Mesh(longHeaderGeo, darkFrameMaterial); h2.position.set(0, 7.6, -2); standGroup.add(h2);
+const h1 = new THREE.Mesh(longHeaderGeo, darkFrameMaterial); h1.position.set(1, 7.6, 2); standGroup.add(h1);
+const h2 = new THREE.Mesh(longHeaderGeo, darkFrameMaterial); h2.position.set(1, 7.6, -2); standGroup.add(h2);
 const h3 = new THREE.Mesh(shortHeaderGeo, darkFrameMaterial); h3.position.set(-2, 7.6, 0); standGroup.add(h3);
-const h4 = new THREE.Mesh(shortHeaderGeo, darkFrameMaterial); h4.position.set(2, 7.6, 0); standGroup.add(h4);
+const h4 = new THREE.Mesh(shortHeaderGeo, darkFrameMaterial); h4.position.set(4, 7.6, 0); standGroup.add(h4);
 
 function addGusset(x, z, rotY) {
     const gussetGeo = new THREE.BoxGeometry(0.4, 0.4, 0.3);
     const gusset = new THREE.Mesh(gussetGeo, darkFrameMaterial);
-    gusset.position.set(x, 7.0, z);
+    gusset.position.set(x, 8, z);
     gusset.rotation.y = rotY;
     standGroup.add(gusset);
 }
-addGusset(-1.8, 1.8, 0);
-addGusset(1.8, 1.8, Math.PI / 2);
-addGusset(-1.8, -1.8, -Math.PI / 2);
-addGusset(1.8, -1.8, Math.PI);
+addGusset(2.7, 2, Math.PI / 2);
+addGusset(2.7, -2.05, Math.PI);
 
 // 3. HORIZONTAL CROSS BRACES
 const sideBraceGeo = new THREE.BoxGeometry(0.2, 0.2, 4.0);
-const backBraceGeo = new THREE.BoxGeometry(4.0, 0.2, 0.2);
+const backBraceGeo = new THREE.BoxGeometry(6.0, 0.2, 0.2);
 const braceHeights = [2.0, 4.5, 6.0];
 
 braceHeights.forEach(h => {
     const bLeft = new THREE.Mesh(sideBraceGeo, aluminumMaterial); bLeft.position.set(-2, h, 0); standGroup.add(bLeft);
-    const bRight = new THREE.Mesh(sideBraceGeo, aluminumMaterial); bRight.position.set(2, h, 0); standGroup.add(bRight);
-    const bBack = new THREE.Mesh(backBraceGeo, aluminumMaterial); bBack.position.set(0, h, -2); standGroup.add(bBack);
+    const bRight = new THREE.Mesh(sideBraceGeo, aluminumMaterial); bRight.position.set(4, h, 0); standGroup.add(bRight);
+    const bBack = new THREE.Mesh(backBraceGeo, aluminumMaterial); bBack.position.set(1, h, -2); standGroup.add(bBack);
 });
 
 // 4. TOP VALVE ARRAY ASSEMBLY
@@ -1829,13 +1828,17 @@ const v2 = new THREE.Mesh(valveCylGeo, greenValveMat); v2.position.set(1.5, 9.0,
 
 // 5. ANIMATED CLEAN SQUARE ROOF PLATFORM
 const topPlateGroup = new THREE.Group();
-topPlateGroup.position.set(0, 8.0, 0); 
+topPlateGroup.position.set(0.25, 8.0, 0); 
 
 // The Solid Square Roof / Ceiling plate covering the top completely
-const squareRoofGeo = new THREE.BoxGeometry(4.3, 0.15, 4.3);
-const squareRoof = new THREE.Mesh(squareRoofGeo, roofPlateMaterial);
-squareRoof.position.y = 0.075;
-topPlateGroup.add(squareRoof);
+const Roof1Geo = new THREE.BoxGeometry(4.8, 0.15, 4.3);
+const Roof1 = new THREE.Mesh(Roof1Geo, roofPlateMaterial);
+Roof1.position.y = 0.075;
+topPlateGroup.add(Roof1);
+const Roof2geo = new THREE.BoxGeometry(1.5, 0.15, 4.3);
+const Roof2 = new THREE.Mesh(Roof2geo, roofPlateMaterial);
+Roof2.position.set(3.2, 0.075, 0);
+topPlateGroup.add(Roof2);
 
 // Add the top plate to the standGroup instead of the scene directly
 standGroup.add(topPlateGroup);
@@ -1843,6 +1846,7 @@ standGroup.add(topPlateGroup);
 scene.add(standGroup);
 standGroup.scale.set(3,2.5,3);
 standGroup.position.y = -8.5;
+standGroup.position.x = -7;
  
 
 //pipe connecting to gas chamber
