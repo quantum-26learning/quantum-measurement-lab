@@ -1974,6 +1974,53 @@ EFAssembly.position.set(3,8.3,-0.9);
 EFAssembly.scale.set(0.4,0.4,0.4);
 
 
+//------------
+//top flangs view
+//-----------
+const topflangGrp = new THREE.Group();
+const topvaccumGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.2, 32);
+const topvaccumMat = new THREE.MeshStandardMaterial({ color: 0x2EB8FF, metalness: 1, roughness: 0.15 });
+const topvaccum = new THREE.Mesh(topvaccumGeo, topvaccumMat);
+topvaccum.position.set(0.6, 7.9, 0.7);
+topflangGrp.add(topvaccum);
+
+const topvaccum2 = new THREE.CircleGeometry(0.25,32);
+const topvaccum2Mat = new THREE.MeshStandardMaterial({ color: 0x2EB8FF, metalness: 1, roughness: 0.15 });
+const topvaccum2Mesh = new THREE.Mesh(topvaccum2, topvaccum2Mat);
+topvaccum2Mesh.position.set(0.6, 8., 0.7);
+topvaccum2Mesh.rotation.x = -Math.PI / 2;
+topflangGrp.add(topvaccum2Mesh);
+const vaccumcylindertopassemble = new THREE.Group();
+const vaccumcylinderGeo = new THREE.CylinderGeometry(0.1, 0.1, 0.6, 32);
+const vaccumcylinderMat = new THREE.MeshStandardMaterial({ color: 0x636A6E, metalness: 1, roughness: 0.15 });
+const vaccumcylinder = new THREE.Mesh(vaccumcylinderGeo, vaccumcylinderMat);
+vaccumcylinder.position.set(1, 7.9, 0.7);
+vaccumcylindertopassemble.add(vaccumcylinder);
+
+const vaccumcylindertop = topvaccum.clone();
+vaccumcylindertop.position.set(1, 8.2, 0.7);
+vaccumcylindertopassemble.add(vaccumcylindertop);
+vaccumcylindertop.scale.set(0.4,0.2,0.4);
+ const vaccumcylindertopring = new THREE.RingGeometry(0.09,0.13,32);
+const vaccumcylindertopringMat = new THREE.MeshStandardMaterial({ color: 0x636A6E, metalness: 1, roughness: 0.15 });
+const vaccumcylindertopringMesh = new THREE.Mesh(vaccumcylindertopring, vaccumcylindertopringMat);
+vaccumcylindertopringMesh.position.set(1, 8.2, 0.7);
+vaccumcylindertopringMesh.rotation.x = -Math.PI / 2;
+vaccumcylindertopassemble.add(vaccumcylindertopringMesh);
+const vaccumcylindertopring2 = new THREE.RingGeometry(0.085,0.09,32);
+const vaccumcylindertopring2Mat = new THREE.MeshStandardMaterial({ color: 0x636A6E, metalness: 1, roughness: 0.15 });
+const vaccumcylindertopring2Mesh = new THREE.Mesh(vaccumcylindertopring2, vaccumcylindertopring2Mat);
+vaccumcylindertopring2Mesh.position.set(1, 8.23, 0.7);
+vaccumcylindertopring2Mesh.rotation.x = -Math.PI / 2;
+vaccumcylindertopassemble.add(vaccumcylindertopring2Mesh);
+topflangGrp.add(vaccumcylindertopassemble);
+
+const vaccumcylindertopassemble2 = vaccumcylindertopassemble.clone();
+vaccumcylindertopassemble2.position.set(-0.1, 4, -0.2);
+vaccumcylindertopassemble2.scale.set(0.5,0.5,0.5);
+topflangGrp.add(vaccumcylindertopassemble2);
+standGroup.add(topflangGrp);
+
 
 scene.add(standGroup);
 standGroup.scale.set(3,2.5,3);
