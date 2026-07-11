@@ -3,11 +3,11 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import gsap from 'gsap';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';       
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';      
 import { Evaluator, Brush, SUBTRACTION } from 'three-bvh-csg';
 import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
 
-//***// 
+//***//
 //lil gui set up (*temprory)
 import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 const gui = new GUI();
@@ -26,7 +26,7 @@ folder.add(displayCoords, 'z').listen().disable();
 // 1. Scene Setup
 const canvas = document.querySelector('#webgl-canvas');
 const scene = new THREE.Scene();
-scene.background = new THREE.Color('#0a0a0a'); 
+scene.background = new THREE.Color('#0a0a0a');
 
 const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(0,20,50);
@@ -77,13 +77,13 @@ function goldplate(r, hasHoles = false) {
 
     if (hasHoles) {
         // holes to give flanges its swiss cheese appearance
-        const numHoles = 3; 
-        const holeRadius = 0.3; 
+        const numHoles = 3;
+        const holeRadius = 0.3;
         for ( let i = 0; i < numHoles; i ++ ) {
             const angle = ( i / numHoles ) * Math.PI;
             const x = Math.cos( angle ) * r * 0.6;
             const y = Math.sin( angle ) * r * 0.6;
-    
+   
             const holePath = new THREE.Path();
             holePath.absarc( x, y, holeRadius, 0, 2 * Math.PI, true );
             df_flange_plate.holes.push( holePath );
@@ -95,56 +95,56 @@ function goldplate(r, hasHoles = false) {
         bevelEnabled: false,
         curveSegments: 24,
     };
-    
+   
     // Creating the base geometry
     let geometry = new THREE.ExtrudeGeometry(df_flange_plate, extrudesettings);
 
     // ==========================================
     // CSG SPHERICAL INCISIONS (TOP AND BOTTOM)
     // ==========================================
-    const incisionRadius = 0.05;
-    const spacing = 0.45; // Distance between incisions
+    // const incisionRadius = 0.05;
+    // const spacing = 0.45; // Distance between incisions
 
-    // Base plate brush
-    const plateBrush = new Brush(geometry);
-    plateBrush.updateMatrixWorld();
+    // // Base plate brush
+    // const plateBrush = new Brush(geometry);
+    // plateBrush.updateMatrixWorld();
 
-    // Create a base cutter sphere
-    const baseSphereGeo = new THREE.SphereGeometry(incisionRadius,6,6);
-    const cutterGeometries = [];
+    // // Create a base cutter sphere
+    // const baseSphereGeo = new THREE.SphereGeometry(incisionRadius,6,6);
+    // const cutterGeometries = [];
 
-    // Generate grid of spherical incisions
-    for (let x = -r; x <= r; x += spacing) {
-        for (let y = -r; y <= r; y += spacing) {
-            // Keep incisions inside the radius (with a small margin so they don't clip the edges)
-            if (x * x + y * y < (r - 0.2) * (r - 0.2)) {
-                // Top spherical incision (centered at z = depth)
-                const topSphere = baseSphereGeo.clone();
-                topSphere.translate(x, y, extrudesettings.depth);
-                cutterGeometries.push(topSphere);
+    // // Generate grid of spherical incisions
+    // for (let x = -r; x <= r; x += spacing) {
+    //     for (let y = -r; y <= r; y += spacing) {
+    //         // Keep incisions inside the radius (with a small margin so they don't clip the edges)
+    //         if (x * x + y * y < (r - 0.2) * (r - 0.2)) {
+    //             // Top spherical incision (centered at z = depth)
+    //             const topSphere = baseSphereGeo.clone();
+    //             topSphere.translate(x, y, extrudesettings.depth);
+    //             cutterGeometries.push(topSphere);
 
-                // Bottom spherical incision (centered at z = 0)
-                const botSphere = baseSphereGeo.clone();
-                botSphere.translate(x, y, 0);
-                cutterGeometries.push(botSphere);
-            }
-        }
-    }
+    //             // Bottom spherical incision (centered at z = 0)
+    //             const botSphere = baseSphereGeo.clone();
+    //             botSphere.translate(x, y, 0);
+    //             cutterGeometries.push(botSphere);
+    //         }
+    //     }
+    // }
 
-    // Evaluate the CSG Subtraction if we have cutters
-    if (cutterGeometries.length > 0) {
-        const mergedCutters = BufferGeometryUtils.mergeGeometries(cutterGeometries);
-        const cutterBrush = new Brush(mergedCutters);
-        cutterBrush.updateMatrixWorld();
+    // // Evaluate the CSG Subtraction if we have cutters
+    // if (cutterGeometries.length > 0) {
+    //     const mergedCutters = BufferGeometryUtils.mergeGeometries(cutterGeometries);
+    //     const cutterBrush = new Brush(mergedCutters);
+    //     cutterBrush.updateMatrixWorld();
 
-        const evaluator = new Evaluator();
-        const result = evaluator.evaluate(plateBrush, cutterBrush, SUBTRACTION);
+    //     const evaluator = new Evaluator();
+    //     const result = evaluator.evaluate(plateBrush, cutterBrush, SUBTRACTION);
 
-        // Replace our starting geometry with the CSG result
-        evaluator.useGroups = false;
-        geometry.dispose(); 
-        geometry = result.geometry;
-    }
+    //     // Replace our starting geometry with the CSG result
+    //     evaluator.useGroups = false;
+    //     geometry.dispose();
+    //     geometry = result.geometry;
+    // }
     // // ==========================================
 
     const material = new THREE.MeshStandardMaterial({color: 0xd4af37, side: THREE.DoubleSide, roughness: 0.15, metalness: 1});
@@ -180,7 +180,7 @@ function df_pipe(r,d, x, y, z) {
             bevelEnabled: false,
             curveSegments: 64,
         };
-        
+       
     const geometry = new THREE.ExtrudeGeometry(shape, extrudesettings);
     const material = new THREE.MeshStandardMaterial({color: 0xE7E7E7, side: THREE.DoubleSide, roughness: 0.2, metalness: 1});
     const mesh = new THREE.Mesh(geometry, material);
@@ -205,7 +205,7 @@ df_pipe(0.23, 0.1, 0.95, 0, 0.75);
 
 
 
-//top flange 
+//top flange
 function top_flange(r) {
     const df_flange_plate = new THREE.Shape();
     df_flange_plate.absarc( 0, 0, r, 0, Math.PI * 2, false );
@@ -215,7 +215,7 @@ function top_flange(r) {
         bevelEnabled: false,
         curveSegments: 64,
     };
-    
+   
     //creating the mesh
     const geometry = new THREE.ExtrudeGeometry(df_flange_plate, extrudesettings);
     const material = new THREE.MeshStandardMaterial({color: 0x353E43, side: THREE.DoubleSide, roughness: 0.15, metalness: 1});
@@ -231,7 +231,7 @@ top_flange(3.5);
 
 
 //top flange details
-const tf_material =  new THREE.MeshStandardMaterial({color: 0x00c9fc, side: THREE.DoubleSide, roughness: 1, metalness: 1});
+const tf_material =  new THREE.MeshStandardMaterial({color: 0x595959, side: THREE.DoubleSide, roughness: 0.15, metalness: 1});
 function tf_cylinder(r,d, x, y, z, angle, bevel = false) {
     const shape = new THREE.Shape();
     shape.absarc( 0, 0, r, 0, angle, true );
@@ -242,12 +242,12 @@ function tf_cylinder(r,d, x, y, z, angle, bevel = false) {
             bevelThickness: 0.02,
             curveSegments: 64,
         };
-        
+       
     const geometry = new THREE.ExtrudeGeometry(shape, extrudesettings);
     const mesh = new THREE.Mesh(geometry, tf_material);
     mesh.position.set(x, y, z);
     mesh.rotation.x = - Math.PI / 2;
-    dfgroup.add(mesh); 
+    dfgroup.add(mesh);
     return mesh;    
 };
 
@@ -258,9 +258,114 @@ tf_cylinder(1, 0.2, 1.5, 11.9, 0, Math.PI * 2);
 tf_cylinder(0.8, 0.9, 1.5, 12, 0, Math.PI * 2);
 tf_cylinder(0.2, 0.7, 0.3, 11.9, 0, Math.PI * 2);
 tf_cylinder(0.25, 0.01, 0.3, 12.6, 0, Math.PI * 2, true);
-tf_cylinder(0.4, 0.7, -0.1, 12, 1.5, Math.PI * 2, true);
-tf_cylinder(0.45, 0.1, -0.1, 12.5, 1.5, Math.PI * 2,);
+tf_cylinder(0.45, 0.15, -0.1, 12, 1.5, Math.PI * 2, true);
+tf_cylinder(0.55, 0.1, -0.1, 12.05, 1.5, Math.PI * 2,);
+tf_cylinder(0.45, 0.15, -0.3, 12, -1.5, Math.PI * 2, true);
+tf_cylinder(0.53, 0.1, -0.3, 12.05, -1.5, Math.PI * 2,);
 
+
+
+const topflangGrp = new THREE.Group();
+const topvaccumGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.2, 32);
+const topvaccumMat = new THREE.MeshStandardMaterial({ color: 0x595959 , metalness: 1, roughness: 0.15 });
+const topvaccum = new THREE.Mesh(topvaccumGeo, topvaccumMat);
+topvaccum.position.set(0.6, 7.9, 0.7);
+//topflangGrp.add(topvaccum);
+
+const topvaccum2 = new THREE.CircleGeometry(0.25,32);
+const topvaccum2Mat = new THREE.MeshStandardMaterial({ color: 0x595959 , metalness: 1, roughness: 0.15 });
+const topvaccum2Mesh = new THREE.Mesh(topvaccum2, topvaccum2Mat);
+topvaccum2Mesh.position.set(0.6, 8., 0.7);
+topvaccum2Mesh.rotation.x = -Math.PI / 2;
+//topflangGrp.add(topvaccum2Mesh);
+
+const vaccumcylinderGeo = new THREE.CylinderGeometry(0.1, 0.1, 0.35, 32);
+const vaccumcylinderMat = new THREE.MeshStandardMaterial({ color: 0x595959, metalness: 0.7, roughness: 0.45 });
+const vaccumcylinder = new THREE.Mesh(vaccumcylinderGeo, vaccumcylinderMat);
+vaccumcylinder.position.set(0.9, 8, 0.7);
+topflangGrp.add(vaccumcylinder);
+const vaccumcylindertopassemble = new THREE.Group();
+const vaccumcylindertop = topvaccum.clone();
+vaccumcylindertop.position.set(1, 8.2, 0.7);
+vaccumcylindertopassemble.add(vaccumcylindertop);
+vaccumcylindertop.scale.set(0.4,0.2,0.4);
+ const vaccumcylindertopring = new THREE.RingGeometry(0.09,0.13,32);
+const vaccumcylindertopringMat = new THREE.MeshStandardMaterial({ color: 0x9370DB, metalness: 1, roughness: 0.15 });
+const vaccumcylindertopringMesh = new THREE.Mesh(vaccumcylindertopring, vaccumcylindertopringMat);
+vaccumcylindertopringMesh.position.set(1, 8.2, 0.7);
+vaccumcylindertopringMesh.rotation.x = -Math.PI / 2;
+vaccumcylindertopassemble.add(vaccumcylindertopringMesh);
+const vaccumcylindertopring2 = new THREE.RingGeometry(0.085,0.09,32);
+const vaccumcylindertopring2Mat = new THREE.MeshStandardMaterial({ color: 0x636A6E, metalness: 1, roughness: 0.15 });
+const vaccumcylindertopring2Mesh = new THREE.Mesh(vaccumcylindertopring2, vaccumcylindertopring2Mat);
+vaccumcylindertopring2Mesh.position.set(1, 8.23, 0.7);
+vaccumcylindertopring2Mesh.rotation.x = -Math.PI / 2;
+vaccumcylindertopassemble.add(vaccumcylindertopring2Mesh);
+topflangGrp.add(vaccumcylindertopassemble);
+vaccumcylindertopassemble.position.set(-0.1, 0, 0);
+
+const vaccumcylindertopassemble1 = vaccumcylindertopassemble.clone();
+const additionalvaccumcy= vaccumcylinder.clone();
+additionalvaccumcy.position.x+=0.1;
+vaccumcylindertopassemble1.add(additionalvaccumcy);
+vaccumcylindertopassemble1.position.set(-0.7, 0, -0.2);
+
+topflangGrp.add(vaccumcylindertopassemble1);
+ 
+const vaccumcylindertopassemble2 = topflangGrp.clone();
+vaccumcylindertopassemble2.position.set(-0.1,0,-1)
+topflangGrp.add(vaccumcylindertopassemble2);
+
+
+//add side bolts
+const sideboltGRp = new THREE.Group();
+const sideboltGeo = new THREE.BoxGeometry(0.08,0.13,0.09);
+const sideboltMat = new THREE.MeshStandardMaterial({ color: 0x595959, metalness: 1, roughness: 0.15 });
+const sidebolt1 = new THREE.Mesh(sideboltGeo, sideboltMat);
+sidebolt1.position.set(0.7, 8., 0.84);
+sidebolt1.rotation.x = Math.PI / 2;
+sidebolt1.rotation.z = -Math.PI / 6;
+sideboltGRp.add(sidebolt1);
+const sidebolts1 = sidebolt1.clone();
+sidebolts1.position.set(0.35, 8., 0.71);
+sidebolts1.rotation.z = Math.PI / 3;
+sideboltGRp.add(sidebolts1);
+const sidebolts2 = sidebolt1.clone();
+sidebolts2.position.set(0.63, 8., 0.42);
+sidebolts2.rotation.z = Math.PI / 12;
+sideboltGRp.add(sidebolts2);
+
+
+
+
+const sidebolttop = Hexnut(0.76, 1.5);
+sidebolttop.material = new THREE.MeshStandardMaterial({ color: 0x595959, metalness: 1, roughness: 0.15 });
+sidebolttop.position.set(0.7, 8.09, 0.84);
+sidebolttop.scale.set(0.04,0.04,0.04);
+sidebolttop.rotation.x = Math.PI / 2;
+sidebolttop.rotation.z = Math.PI / 6;
+const sidebolttop2 = sidebolttop.clone();
+sidebolttop2.position.set(0.35, 8.09, 0.71);
+sidebolttop2.rotation.z = -Math.PI / 3;
+const sidebolttop3 = sidebolttop.clone();
+sidebolttop3.position.set(0.63, 8.09, 0.42);
+sidebolttop3.rotation.z = -Math.PI / 12;  
+
+sideboltGRp.add(sidebolttop);
+sideboltGRp.add(sidebolttop2);
+sideboltGRp.add(sidebolttop3);
+
+sideboltGRp.add(sidebolttop);
+topflangGrp.add(sideboltGRp);
+const sideboltGRp2 = sideboltGRp.clone();
+sideboltGRp2.position.set(-0.06, 0, -1);
+
+topflangGrp.add(sideboltGRp2);
+
+
+topflangGrp.scale.set(3,2.5,3);
+topflangGrp.position.set(-1.8, -8, -0.45);
+dfgroup.add(topflangGrp);
 
 //dilution unit
 function cont_heatexchanger() {
@@ -279,7 +384,7 @@ function cont_heatexchanger() {
     const mesh = new THREE.Mesh(geometry, material);
     //Adds to scene
     duGroup.add(mesh);
-    mesh.position.y = 2.5; 
+    mesh.position.y = 2.5;
 };
 
 const CHE = cont_heatexchanger();
@@ -308,7 +413,7 @@ function du_cylinder(r,d, col, y) {
             bevelEnabled: false,
             curveSegments: 64,
         };
-        
+       
     const geometry = new THREE.ExtrudeGeometry(shape, extrudesettings);
     const material = new THREE.MeshStandardMaterial({color: col, side: THREE.DoubleSide, roughness: 0.05, metalness: 1});
     const mesh = new THREE.Mesh(geometry, material);
@@ -342,7 +447,7 @@ function dupipe(r,d, x, y, z) {
             bevelEnabled: false,
             curveSegments: 64,
         };
-        
+       
     const geometry = new THREE.ExtrudeGeometry(shape, extrudesettings);
     const material = new THREE.MeshStandardMaterial({color: 0xE7E7E7, side: THREE.DoubleSide, roughness: 0.15, metalness: 1});
     const mesh = new THREE.Mesh(geometry, material);
@@ -392,22 +497,22 @@ connectHelixToPlate9();
 // Connecting tube from Helix upper end to the plate above (Still)
 function connectHelixToUpperPlate() {
     const points = [];
-    
+   
     // Continue the spiral smoothly for a bit, gradually increasing the radius
     for (let i = 150; i <= 165; i++) {
         const angle = i * 0.3;
         const height = i * 0.005 + 2.5;
-        const radius = 0.5 + (i - 150) * 0.003; 
+        const radius = 0.5 + (i - 150) * 0.003;
         points.push(new THREE.Vector3(Math.cos(angle) * radius, height, Math.sin(angle) * radius));
     }
-    
+   
     // Bend upwards to connect vertically into the plate
     const endX = points[points.length - 1].x;
     const endZ = points[points.length - 1].z;
-    
+   
     points.push(new THREE.Vector3(endX, 3.4, endZ));
     points.push(new THREE.Vector3(endX, 3.5, endZ)); // Connects to the bottom of still_1
-    
+   
     const path = new THREE.CatmullRomCurve3(points);
     const geometry = new THREE.TubeGeometry(path, 64, 0.04, 8, false);
     const material = new THREE.MeshStandardMaterial({ color: 0xd4af37, side: THREE.DoubleSide, roughness: 0.15, metalness: 1 });
@@ -653,22 +758,22 @@ for (let i = -1.2; i < 1.2; i += 0.3) {
             attenuator.rotation.x=-Math.PI/2;
 
             if(index===0 || index===4){
-                
+               
 
             }else{plate.add(attenuator);
 
             }
-            
+           
             // create a curved cable from the connector to the attenuator
            
     }
 }
 
 
-    
+   
 
         }
-    
+   
 );
 
 const points = [];
@@ -738,7 +843,7 @@ const tubeMaterial = new THREE.MeshStandardMaterial({
  
  
         for (let y = -1.061; y < 1.061; y += 0.3) {
-    
+   
        
          const multirfconnector = baseattGroup.clone();
          multirfconnector.position.set(1.185, y, 0.32); // sits on top of filter
@@ -770,16 +875,16 @@ function createPumpLineAssembly() {
         new THREE.Vector3(-1.5, 2, 0),
         new THREE.Vector3(-1.5, 3, 0),
     ];
-    
+   
     // 1. Define the base path shared by both the tube and the helix
     const baseCurve = new THREE.CatmullRomCurve3(points);
     const mainTubeRadius = 0.55;
 
     // --- MAIN TUBE ---
     const tubeGeometry = new THREE.TubeGeometry(baseCurve, 100, mainTubeRadius, 16, false);
-    const tubeMaterial = new THREE.MeshStandardMaterial({ 
-        color: 0xE7E7E7, 
-        metalness: 1, 
+    const tubeMaterial = new THREE.MeshStandardMaterial({
+        color: 0xE7E7E7,
+        metalness: 1,
         roughness: 0.15,
         side: THREE.DoubleSide
     });
@@ -791,10 +896,10 @@ function createPumpLineAssembly() {
     const coils = 20; // Number of wraps
     const coilThickness = 0.05; // Radius of the wrapping wire
     const wrapRadius = mainTubeRadius + coilThickness; // Keeps it right on the surface
-    
+   
     // Define the "middle part" using percentage along the curve (0.0 to 1.0)
-    const tStart = 0.35; 
-    const tEnd = 0.62;   
+    const tStart = 0.35;
+    const tEnd = 0.62;  
     const helixSegments = 500;
     const helixPoints = [];
 
@@ -804,10 +909,10 @@ function createPumpLineAssembly() {
 
     for (let i = 0; i <= helixSegments; i++) {
         // u goes from 0 to 1 (progress along the helix itself)
-        const u = i / helixSegments; 
-        
+        const u = i / helixSegments;
+       
         // t maps u to the chosen segment of the base curve (0.25 to 0.75)
-        const t = tStart + u * (tEnd - tStart); 
+        const t = tStart + u * (tEnd - tStart);
 
         // 1. Get the center point on the base curve at t
         const pointOnCurve = baseCurve.getPoint(t);
@@ -834,18 +939,18 @@ function createPumpLineAssembly() {
 
     // Create a curve from our generated spiral points
     const helixCurve = new THREE.CatmullRomCurve3(helixPoints);
-    
+   
     // Create the geometry and mesh for the helix
     const helixGeometry = new THREE.TubeGeometry(helixCurve, helixSegments, coilThickness, 8, false);
-    const helixMaterial = new THREE.MeshStandardMaterial({ 
+    const helixMaterial = new THREE.MeshStandardMaterial({
         color: 0x71797E,
-        metalness: 1, 
-        roughness: 0.15 
+        metalness: 1,
+        roughness: 0.15
     });
     const helixMesh = new THREE.Mesh(helixGeometry, helixMaterial);
-    
+   
     pumpline.add(helixMesh);
-    
+   
     function cylinder(r, d, y) {
         const shape = new THREE.Shape();
         shape.absarc(0, 0, r, 0, Math.PI * 2, false);
@@ -929,7 +1034,7 @@ function createPumpLineAssembly() {
     cylinder_caps(0.2, 0.2, Math.PI/2, -3, 6.68, -0.01);
     cylinder_caps(0.7, 0.2, 0, 0, -0.45, 0);
     cylinder_caps(0.6, 0.6, 0, 0, -1, 0);
-  
+ 
   function ptc_pumpline_junction() {
     const mesh = new THREE.Mesh(
       new THREE.CylinderGeometry(0.2, 0.2, 1.4, 64),
@@ -972,18 +1077,18 @@ function jt() {
     const mesh = new THREE.Mesh(geometry, material);
     //Adds to scene
     duGroup.add(mesh);
-    mesh.position.y = 5.4; 
+    mesh.position.y = 5.4;
 }
 
 jt();
 
 
 function createBolt(radius, numBolts, x, y, z) {
-    const cloneGroup = new THREE.Group(); 
+    const cloneGroup = new THREE.Group();
     const boltGroup = new THREE.Group();
-    
+   
     // 1. Single metallic material for the whole bolt
-    const steelMaterial = new THREE.MeshStandardMaterial({ 
+    const steelMaterial = new THREE.MeshStandardMaterial({
         color: 0x889498,   // Steel gray
         metalness: 0.9,    // Highly metallic
         roughness: 0.25    // Slightly glossy
@@ -994,7 +1099,7 @@ function createBolt(radius, numBolts, x, y, z) {
         new THREE.CylinderGeometry(0.3, 0.3, 0.2, 6),
         steelMaterial
     );
-    
+   
     // 3. Washer (adds a nice realistic detail under the head)
     const washer = new THREE.Mesh(
         new THREE.CylinderGeometry(0.35, 0.35, 0.05, 10),
@@ -1007,16 +1112,16 @@ function createBolt(radius, numBolts, x, y, z) {
         new THREE.CylinderGeometry(0.15, 0.15, 1, 16),
         steelMaterial
     );
-    shaft.position.y = -0.8; 
-    
+    shaft.position.y = -0.8;
+   
     boltGroup.add(head, washer, shaft);
     boltGroup.scale.set(0.2, 0.2, 0.2);  
-    
-    
+   
+   
     for (let i = 0; i < numBolts; i++) {
         const clone = boltGroup.clone();
         const angle = (i / numBolts) * Math.PI * 2;
-        
+       
         clone.position.x = Math.cos(angle) * radius;
         clone.position.z = Math.sin(angle) * radius;
         cloneGroup.add(clone);
@@ -1345,7 +1450,7 @@ const leftRod =
     new THREE.CylinderGeometry(
       0.20,
       0.12,
-      7.8,
+      6.5,
       32
     ),
     silverMaterial
@@ -1507,23 +1612,23 @@ let currentY = 0;
 
 tiers.forEach(([outR, inR, height]) => {
   const shape = new THREE.Shape().absarc(0, 0, outR, 0, Math.PI * 2, false);
-  
+ 
   // Create hollow interior by adding a hole path
   if (inR > 0) {
     shape.holes.push(new THREE.Path().absarc(0, 0, inR, 0, Math.PI * 2, true));
   }
 
-  const geometry = new THREE.ExtrudeGeometry(shape, { 
-    depth: height, 
-    curveSegments: 64, 
-    bevelEnabled: true 
+  const geometry = new THREE.ExtrudeGeometry(shape, {
+    depth: height,
+    curveSegments: 64,
+    bevelEnabled: true
   });
-  
+ 
   const mesh = new THREE.Mesh(geometry, material);
   // ExtrudeGeometry extrudes along +Z. Rotate -90° on X to stack vertically along +Y.
   mesh.rotation.x = -Math.PI / 2;
   mesh.position.y = currentY;
-  
+ 
   cryocase.add(mesh);
   currentY += height;
 });
@@ -1566,7 +1671,7 @@ ring.position.set(1.4,1.7,2.64);
 
 
 
-//screens (Scaled and positione 
+//screens (Scaled and positione
 const screenGeom = new THREE.BoxGeometry(2, 1.1, 0.05);
 const screenMat = new THREE.MeshStandardMaterial({ color: 'white', emissive: 'white', emissiveIntensity: 0.5 });
 const screen =new THREE.Mesh(screenGeom, screenMat);
@@ -1605,12 +1710,12 @@ mcbBody.add(label);
 function createHandle(xPos) {
     const handleGroup = new THREE.Group();
     const handleMat = new THREE.MeshStandardMaterial({ color: 'black' });
-    
+   
     // Vertical grip (Scaled to 1.6 units long)
     const gripGeom = new THREE.CylinderGeometry(0.15, 0.15, 2.2);
-    
+   
     const grip = new THREE.Mesh(gripGeom, handleMat);
-    
+   
     // Top/Bottom supports (Scaled)
     const supportGeom = new THREE.BoxGeometry(0.15, 0.15, 1.2);
     const topSup = new THREE.Mesh(supportGeom, handleMat);
@@ -1662,7 +1767,7 @@ loader.load('pressuregaug.jpeg', (texture) => {
 
     const knobMat = new THREE.MeshBasicMaterial({
         map : texture,
-    
+   
         side: THREE.DoubleSide
     });
     const knob = new THREE.Mesh(knobGeom, knobMat);
@@ -1670,7 +1775,7 @@ loader.load('pressuregaug.jpeg', (texture) => {
     knob.rotation.x =Math.PI/2;
     loader.anisotropy = renderer.capabilities.getMaxAnisotropy();
     loader.generateMipmaps = true;
-    
+   
     machineGroup.add(knob);
 
     const knob2 = knob.clone();
@@ -1694,9 +1799,9 @@ function createWheel(x, z) {
     return wheel;
 }
 machineGroup.add(
-    createWheel(3.2, 1.7), 
-    createWheel(-3.2, 1.7), 
-    createWheel(3.2, -1.7), 
+    createWheel(3.2, 1.7),
+    createWheel(-3.2, 1.7),
+    createWheel(3.2, -1.7),
     createWheel(-3.2, -1.7)
 );
 
@@ -1713,7 +1818,7 @@ for(let i = -3; i < 1; i+=0.05){
   const compressorring2=compressorring.clone();
   machineGroup.add(compressorring2);
   compressorring2.position.set(1.7, -2, 2.55+i*0.15);
-  
+ 
 
 }
 scene.add(machineGroup);
@@ -1757,8 +1862,8 @@ function compressor_pipes() {
          new THREE.Vector3(28.2,-7.0,4),
          new THREE.Vector3(28.58,-6.97,2.7),
     ];
-        
-    
+       
+   
         const points_2 = [
         new THREE.Vector3(3.24, 12.44, 0.18),
          new THREE.Vector3(4.5, 12.5, 0.18),
@@ -1805,7 +1910,7 @@ function compressor_pipes() {
     connectingwiregroup.add(pipe_1);
     connectingwiregroup.add(pipe_2);
 
-  
+ 
 
     scene.add(connectingwiregroup);
 };
@@ -1817,7 +1922,7 @@ compressor_pipes();
 // 0. MATERIALS
 const aluminumMaterial = new THREE.MeshStandardMaterial({ color: '#c5cbd1', metalness: 0.9, roughness: 0.1 });
 const darkFrameMaterial = new THREE.MeshStandardMaterial({ color: '#1c1f22', roughness: 0.7 });
-const roofPlateMaterial = new THREE.MeshStandardMaterial({ color: '#3a414a', metalness: 0.9, roughness: 0.3 }); 
+const roofPlateMaterial = new THREE.MeshStandardMaterial({ color: '#3a414a', metalness: 0.9, roughness: 0.3 });
 const greenValveMat = new THREE.MeshStandardMaterial({ color: '#4d8060', roughness: 0.4 });
 
 // MASTER STAND GROUP
@@ -1888,7 +1993,7 @@ supportBrace(3.6, 6.7, 2, -Math.PI / 3);
 
 // 5. ANIMATED CLEAN SQUARE ROOF PLATFORM
 const topPlateGroup = new THREE.Group();
-topPlateGroup.position.set(0.25, 8.0, 0); 
+topPlateGroup.position.set(0.25, 8.0, 0);
 
 // The Solid Square Roof / Ceiling plate covering the top completely
 const Roof2geo = new THREE.BoxGeometry(1.6, 0.15, 4.3);
@@ -1902,7 +2007,7 @@ standGroup.add(topPlateGroup);
 // 4. TOP VALVE ARRAY ASSEMBLY
 const EFAssembly= new THREE.Group();
 const EFmainGeom = new THREE.BoxGeometry(1,2,2);
-const EFmainmat =new THREE.MeshStandardMaterial({color:0x6B8E23,metalness:1,roughness:0.15});
+const EFmainmat =new THREE.MeshStandardMaterial({color:0x636A6E,metalness:1,roughness:0.15});
 const EFmain = new THREE.Mesh(EFmainGeom,EFmainmat);
 EFAssembly.add(EFmain);
 //EFmain.rotation.x = Math.PI/2;
@@ -1912,7 +2017,7 @@ EFAssembly.add(EFmain2);
 EFmain2.position.set(0,2.02,0);
 
 const EFconnectorGeom = new THREE.CylinderGeometry(0.7,0.7,3,16,32);
-const Efconnectormat = new THREE.MeshStandardMaterial({color:0x91B7D8,metalness:0.7,roughness:0.1});
+const Efconnectormat = new THREE.MeshStandardMaterial({color:0xd6d6d6,metalness:1,roughness:0.15});
 const EFconnector = new THREE.Mesh(EFconnectorGeom,Efconnectormat);
 EFAssembly.add(EFconnector);
 EFconnector.position.set(0,0,0);
@@ -1934,8 +2039,8 @@ const EFwirePoints = [
     new THREE.Vector3(1.95, 0, 0),   // Start from EFconnector end
     new THREE.Vector3(2.3, 0.05, 0),
     new THREE.Vector3(2.8, 0.2, -0.15),
-    new THREE.Vector3(3.5, 0.4, -0.4),
-    new THREE.Vector3(4.5, 0.3, -0.8)
+    //new THREE.Vector3(3.5, 0.4, -0.4),
+    //new THREE.Vector3(4.5, 0.3, -0.8)
 ];
 
 const EFwireCurve = new THREE.CatmullRomCurve3(EFwirePoints);
@@ -1969,63 +2074,18 @@ EFAssembly.add(EFconend4);
 EFconend4.position.set(1.3,2.05,0);
 
 standGroup.add(EFAssembly);
-EFAssembly.rotation.y=-Math.PI;
-EFAssembly.position.set(3,8.3,-0.9);
-EFAssembly.scale.set(0.4,0.4,0.4);
+EFAssembly.rotation.x=Math.PI/2;
+EFAssembly.rotation.y=Math.PI;
+EFAssembly.position.set(3,8.5,-1.5);
+EFAssembly.scale.set(0.45,0.45,0.45);
 
 
-//------------
-//top flangs view
-//-----------
-const topflangGrp = new THREE.Group();
-const topvaccumGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.2, 32);
-const topvaccumMat = new THREE.MeshStandardMaterial({ color: 0x2EB8FF, metalness: 1, roughness: 0.15 });
-const topvaccum = new THREE.Mesh(topvaccumGeo, topvaccumMat);
-topvaccum.position.set(0.6, 7.9, 0.7);
-topflangGrp.add(topvaccum);
-
-const topvaccum2 = new THREE.CircleGeometry(0.25,32);
-const topvaccum2Mat = new THREE.MeshStandardMaterial({ color: 0x2EB8FF, metalness: 1, roughness: 0.15 });
-const topvaccum2Mesh = new THREE.Mesh(topvaccum2, topvaccum2Mat);
-topvaccum2Mesh.position.set(0.6, 8., 0.7);
-topvaccum2Mesh.rotation.x = -Math.PI / 2;
-topflangGrp.add(topvaccum2Mesh);
-const vaccumcylindertopassemble = new THREE.Group();
-const vaccumcylinderGeo = new THREE.CylinderGeometry(0.1, 0.1, 0.6, 32);
-const vaccumcylinderMat = new THREE.MeshStandardMaterial({ color: 0x636A6E, metalness: 1, roughness: 0.15 });
-const vaccumcylinder = new THREE.Mesh(vaccumcylinderGeo, vaccumcylinderMat);
-vaccumcylinder.position.set(1, 7.9, 0.7);
-vaccumcylindertopassemble.add(vaccumcylinder);
-
-const vaccumcylindertop = topvaccum.clone();
-vaccumcylindertop.position.set(1, 8.2, 0.7);
-vaccumcylindertopassemble.add(vaccumcylindertop);
-vaccumcylindertop.scale.set(0.4,0.2,0.4);
- const vaccumcylindertopring = new THREE.RingGeometry(0.09,0.13,32);
-const vaccumcylindertopringMat = new THREE.MeshStandardMaterial({ color: 0x636A6E, metalness: 1, roughness: 0.15 });
-const vaccumcylindertopringMesh = new THREE.Mesh(vaccumcylindertopring, vaccumcylindertopringMat);
-vaccumcylindertopringMesh.position.set(1, 8.2, 0.7);
-vaccumcylindertopringMesh.rotation.x = -Math.PI / 2;
-vaccumcylindertopassemble.add(vaccumcylindertopringMesh);
-const vaccumcylindertopring2 = new THREE.RingGeometry(0.085,0.09,32);
-const vaccumcylindertopring2Mat = new THREE.MeshStandardMaterial({ color: 0x636A6E, metalness: 1, roughness: 0.15 });
-const vaccumcylindertopring2Mesh = new THREE.Mesh(vaccumcylindertopring2, vaccumcylindertopring2Mat);
-vaccumcylindertopring2Mesh.position.set(1, 8.23, 0.7);
-vaccumcylindertopring2Mesh.rotation.x = -Math.PI / 2;
-vaccumcylindertopassemble.add(vaccumcylindertopring2Mesh);
-topflangGrp.add(vaccumcylindertopassemble);
-
-const vaccumcylindertopassemble2 = vaccumcylindertopassemble.clone();
-vaccumcylindertopassemble2.position.set(-0.1, 4, -0.2);
-vaccumcylindertopassemble2.scale.set(0.5,0.5,0.5);
-topflangGrp.add(vaccumcylindertopassemble2);
-standGroup.add(topflangGrp);
 
 
 scene.add(standGroup);
 standGroup.scale.set(3,2.5,3);
 standGroup.position.y = -8.5;
-standGroup.position.x = -7;
+standGroup.position.x = -7; 
  
 
 //pipe connecting to gas chamber
@@ -2117,7 +2177,7 @@ const t_junction_body = new THREE.Mesh(
 );
 t_junction_body.rotation.z = Math.PI / 2;
 t_junction_body.position.set(-3, 2.0, 0);
-pipe_assembly_group.add(t_junction_body); 
+pipe_assembly_group.add(t_junction_body);
 
 // left end of horizontal pipe (adjusted naming based on -3 X coordinate)
 const left_side_vertical_pipe = new THREE.Mesh(
@@ -2191,7 +2251,7 @@ pipe_assembly_group.add(ghucollar);
 
 
 //add grp to scene
-// scene.add(pipe_assembly_group); 
+// scene.add(pipe_assembly_group);
 pipe_assembly_group.scale.set(3,3,3);
 pipe_assembly_group.position.set(5.8,10,0);
 pipe_assembly_group.rotation.y = Math.PI;
@@ -2205,7 +2265,7 @@ pipe_assembly_group.rotation.y = Math.PI;
 
 // --- 4. Industrial Spec PBR Materials ---
 const polishedSteelMaterial = new THREE.MeshStandardMaterial({
-    color: 0x28282B, 
+    color: 0x28282B,
     metalness: 1,
     roughness: 0.16
 });
@@ -2217,7 +2277,7 @@ const subtleJointMaterial = new THREE.MeshStandardMaterial({
 });
 
 const screenBezelMaterial = new THREE.MeshStandardMaterial({
-    color: 0x9ba5b0, 
+    color: 0x9ba5b0,
     metalness: 0.8,
     roughness: 0.28
 });
@@ -2257,7 +2317,7 @@ function renderEmbeddedDisplay(temp, pressure, flow) {
     ctx.stroke();
 
     ctx.font = '24px "Courier New", monospace';
-    
+   
     ctx.fillStyle = '#7f8c8d';
     ctx.fillText('GAS MATRIX   :', 35, 115);
     ctx.fillStyle = '#e67e22';
@@ -2310,7 +2370,7 @@ function createRoundedBoxGeometry(width, height, depth, radius, bevelSegments) {
     };
 
     const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-    geometry.center(); 
+    geometry.center();
     geometry.rotateX(Math.PI / 2);
     return geometry;
 }
@@ -2327,7 +2387,7 @@ const segmentSmoothness = 8;
 // BLOCK 1: Top Cap Housing (Stainless Steel)
 const capGeo = createRoundedBoxGeometry(0.7, 0.24, 0.7, curveRadius, segmentSmoothness);
 const capMesh = new THREE.Mesh(capGeo, polishedSteelMaterial);
-capMesh.position.y = 0.53; 
+capMesh.position.y = 0.53;
 chamberGroup.add(capMesh);
 
 // SEAM LINE 1: Recessed Joint Line
@@ -2339,7 +2399,7 @@ chamberGroup.add(joint1);
 // BLOCK 3: Central Core Module (Stainless Steel Base)
 const centerSteelGeo = createRoundedBoxGeometry(0.7, 1.1, 0.7, curveRadius, segmentSmoothness);
 const centerSteelMesh = new THREE.Mesh(centerSteelGeo, polishedSteelMaterial);
-centerSteelMesh.position.y = -0.18; 
+centerSteelMesh.position.y = -0.18;
 chamberGroup.add(centerSteelMesh);
 
 // SEAM LINE 3: Recessed Joint Line
@@ -2381,7 +2441,7 @@ function createQuantumFridgeStand() {
     // 3. Foot Component Dimensions
     const shaftRadius = 0.015;
     const shaftHeight = 0.15;
-    
+   
     // The magic numbers for the "curved outward" flare effect
     const footBaseRadiusTop = 0.015;   // Matches the shaft
     const footBaseRadiusBottom = 0.06; // Widens out significantly at the floor
@@ -2432,12 +2492,12 @@ createQuantumFridgeStand();
 // C. Front Panel Instrumentation Display
 const screenEnclosureGeo = createRoundedBoxGeometry(0.56, 0.34, 0.02, 0.01, 3);
 const screenEnclosure = new THREE.Mesh(screenEnclosureGeo, screenBezelMaterial);
-screenEnclosure.position.set(0, -0.145, 0.36); 
+screenEnclosure.position.set(0, -0.145, 0.36);
 chamberGroup.add(screenEnclosure);
 
 const displayScreenGeo = new THREE.PlaneGeometry(0.53, 0.31);
 const displayScreen = new THREE.Mesh(displayScreenGeo, screenDisplayMaterial);
-displayScreen.position.set(0, -0.145, 0.372); 
+displayScreen.position.set(0, -0.145, 0.372);
 chamberGroup.add(displayScreen);
 
 // --- 7.5 Added Details: Handle & Data Ports ---
@@ -2520,7 +2580,7 @@ for (let i = 0; i < numPorts; i++) {
     singlePortGroup.add(base);
     singlePortGroup.add(inner);
 
-    // Add the blue glow and a subtle light to the top two ports 
+    // Add the blue glow and a subtle light to the top two ports
     if (i < 2) {
         const glow = new THREE.Mesh(glowRingGeo, glowRingMat);
         glow.position.z = 0.005;
@@ -2562,12 +2622,12 @@ function createDewar() {
 
     // 1. Main Body: LatheGeometry maps the exact ribs and shoulder curve
     const points = [];
-    
+   
     // Base
     points.push(new THREE.Vector2(0, 0));
     points.push(new THREE.Vector2(9, 0));
     points.push(new THREE.Vector2(10, 1));
-    
+   
     // Lower Body & Rib 1
     points.push(new THREE.Vector2(10, 4));
     points.push(new THREE.Vector2(9.6, 4.2)); // groove inward
@@ -2637,7 +2697,7 @@ function createDewar() {
     const capMaterial = new THREE.MeshBasicMaterial({ color: 0x1c3a76 });
     const capShape = new THREE.Shape();
     capShape.absarc(0, 0, 3.2, 0, Math.PI * 2, false);
-    
+   
     const capGeo = new THREE.ExtrudeGeometry(capShape, { depth: 2, bevelEnabled: false });
     const cap = new THREE.Mesh(capGeo, capMaterial);
     cap.rotation.x = -Math.PI / 2;
@@ -2771,7 +2831,7 @@ const mouse = new THREE.Vector2();
 // Define your animation states (same as before)
 let isOpen = false;
 const closedY = 0;      
-const openY = -15;       
+const openY = -15;      
 
 // 2. Listen for clicks
 window.addEventListener('click', (event) => {
@@ -2795,7 +2855,7 @@ window.addEventListener('click', (event) => {
         // 🌟 ADDED: Safely check if the clicked mesh is part of the cryocase group
         let hitCryocase = false;
         let currentObject = closestHit.object;
-        
+       
         // Walk up the 3D object tree to see if it belongs to 'cryocase'
         while (currentObject) {
             if (currentObject === cryocase) {
@@ -2807,7 +2867,7 @@ window.addEventListener('click', (event) => {
 
         // YOUR ORIGINAL LOGIC: Toggle state only if the cryocase was part of the hit
         if (hitCryocase) {
-            isOpen = !isOpen; 
+            isOpen = !isOpen;
         }
     }
 });
@@ -2831,7 +2891,7 @@ document.getElementById('btn-onetone').addEventListener('click', () => {
         x: -2, y: 2, z: 6,
         duration: 1.5, ease: "power2.inOut"
     });
-    
+   
     // 2. Move the point the camera is looking at!
     gsap.to(controls.target, {
         x: 0, y: 2, z: 0, // Adjust these coordinates to match the center of what you want to look at
@@ -2844,9 +2904,9 @@ document.getElementById('btn-twotone').addEventListener('click', () => {
         x: 5, y: 4, z: 8,
         duration: 1.5, ease: "power2.inOut"
     });
-    
+   
     gsap.to(controls.target, {
-        x: 0, y: 4, z: 0, 
+        x: 0, y: 4, z: 0,
         duration: 1.5, ease: "power2.inOut"
     });
 });
