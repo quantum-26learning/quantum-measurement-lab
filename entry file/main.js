@@ -2072,12 +2072,17 @@ EFconend2.rotation.z=Math.PI/2;
 //EFconnecting wire
 const EFwirePoints = [
     new THREE.Vector3(1.95, 0, 0),   // Start from EFconnector end
-    new THREE.Vector3(2.3, 0.05, 0),
-    new THREE.Vector3(2.8, 0.2, -0.15),
-    //new THREE.Vector3(3.5, 0.4, -0.4),
-    //new THREE.Vector3(4.5, 0.3, -0.8)
-    //new THREE.Vector3(3.5, 0.4, -0.4),
-    //new THREE.Vector3(4.5, 0.3, -0.8)
+    new THREE.Vector3(2.3, 0.05, 0.2),
+    new THREE.Vector3(2.5, 0.05, 0.3),
+    new THREE.Vector3(2.8, 0.3, 0.6),
+    new THREE.Vector3(2.9, 0.7, 0.8),
+    new THREE.Vector3(3.8, 2.8, 1),
+     new THREE.Vector3(3.9, 3, 1),
+     new THREE.Vector3(3.92, 3.1, 1),
+     new THREE.Vector3(3.942, 3.19, 0.8),
+
+    // new THREE.Vector3(3.97, 3.1, 0.65),
+    
 ];
 
 const EFwireCurve = new THREE.CatmullRomCurve3(EFwirePoints);
@@ -2094,9 +2099,9 @@ const EFwireGeom = new THREE.TubeGeometry(
 
 const EFwire = new THREE.Mesh(EFwireGeom, Efconnectormat);
 EFAssembly.add(EFwire);
-const EFwire2 = EFwire.clone();
-EFAssembly.add(EFwire2);
-EFwire2.position.set(0,2.05,0);
+
+
+
 
 const EFconnector2=EFconnector.clone();
 EFAssembly.add(EFconnector2);
@@ -2121,6 +2126,12 @@ for(let i=-1.;i<=2.8;i+=0.6){
     EF2.position.set(0,i,1.2);
     EFAssembly.add(EF2);
 };
+
+
+
+
+
+
  const EFextra2GE =new THREE.BoxGeometry(4,0.2,0.4);
  const EFextra2=new THREE.Mesh(EFextra2GE,EFmainmat);
  EFAssembly.add(EFextra2);
@@ -2132,6 +2143,7 @@ for(let j=-0.4;j<=0.6;j+=0.4){
      EF3.position.set(j,1,1.2);
      EFAssembly.add(EF3);
 };
+
 
 standGroup.add(EFAssembly);
 EFAssembly.rotation.x=Math.PI/2;
