@@ -102,49 +102,49 @@ function goldplate(r, hasHoles = false) {
     // ==========================================
     // CSG SPHERICAL INCISIONS (TOP AND BOTTOM)
     //==========================================
-    const incisionRadius = 0.05;
-    const spacing = 0.45; // Distance between incisions
+    // const incisionRadius = 0.05;
+    // const spacing = 0.45; // Distance between incisions
 
-    // Base plate brush
-    const plateBrush = new Brush(geometry);
-    plateBrush.updateMatrixWorld();
+    // // Base plate brush
+    // const plateBrush = new Brush(geometry);
+    // plateBrush.updateMatrixWorld();
 
-    // Create a base cutter sphere
-    const baseSphereGeo = new THREE.SphereGeometry(incisionRadius,6,6);
-    const cutterGeometries = [];
+    // // Create a base cutter sphere
+    // const baseSphereGeo = new THREE.SphereGeometry(incisionRadius,6,6);
+    // const cutterGeometries = [];
 
-    // Generate grid of spherical incisions
-    for (let x = -r; x <= r; x += spacing) {
-        for (let y = -r; y <= r; y += spacing) {
-            // Keep incisions inside the radius (with a small margin so they don't clip the edges)
-            if (x * x + y * y < (r - 0.2) * (r - 0.2)) {
-                // Top spherical incision (centered at z = depth)
-                const topSphere = baseSphereGeo.clone();
-                topSphere.translate(x, y, extrudesettings.depth);
-                cutterGeometries.push(topSphere);
+    // // Generate grid of spherical incisions
+    // for (let x = -r; x <= r; x += spacing) {
+    //     for (let y = -r; y <= r; y += spacing) {
+    //         // Keep incisions inside the radius (with a small margin so they don't clip the edges)
+    //         if (x * x + y * y < (r - 0.2) * (r - 0.2)) {
+    //             // Top spherical incision (centered at z = depth)
+    //             const topSphere = baseSphereGeo.clone();
+    //             topSphere.translate(x, y, extrudesettings.depth);
+    //             cutterGeometries.push(topSphere);
 
-                // Bottom spherical incision (centered at z = 0)
-                const botSphere = baseSphereGeo.clone();
-                botSphere.translate(x, y, 0);
-                cutterGeometries.push(botSphere);
-            }
-        }
-    }
+    //             // Bottom spherical incision (centered at z = 0)
+    //             const botSphere = baseSphereGeo.clone();
+    //             botSphere.translate(x, y, 0);
+    //             cutterGeometries.push(botSphere);
+    //         }
+    //     }
+    // }
 
-    // Evaluate the CSG Subtraction if we have cutters
-    if (cutterGeometries.length > 0) {
-        const mergedCutters = BufferGeometryUtils.mergeGeometries(cutterGeometries);
-        const cutterBrush = new Brush(mergedCutters);
-        cutterBrush.updateMatrixWorld();
+    // // Evaluate the CSG Subtraction if we have cutters
+    // if (cutterGeometries.length > 0) {
+    //     const mergedCutters = BufferGeometryUtils.mergeGeometries(cutterGeometries);
+    //     const cutterBrush = new Brush(mergedCutters);
+    //     cutterBrush.updateMatrixWorld();
 
-        const evaluator = new Evaluator();
-        const result = evaluator.evaluate(plateBrush, cutterBrush, SUBTRACTION);
+    //     const evaluator = new Evaluator();
+    //     const result = evaluator.evaluate(plateBrush, cutterBrush, SUBTRACTION);
 
-        // Replace our starting geometry with the CSG result
-        evaluator.useGroups = false;
-        geometry.dispose();
-        geometry = result.geometry;
-    }
+    //     // Replace our starting geometry with the CSG result
+    //     evaluator.useGroups = false;
+    //     geometry.dispose();
+    //     geometry = result.geometry;
+    // }
     // ==========================================
 
     const material = new THREE.MeshStandardMaterial({color: 0xd4af37, side: THREE.DoubleSide, roughness: 0.15, metalness: 1});
@@ -1246,6 +1246,23 @@ topRing.position.y = 1.25;
 
 ptcheadgrp.add(topRing);
 
+const ptc2topring = new THREE.CatmullRomCurve3([
+  new THREE.Vector3(0.33,13.03,4.22),
+  new THREE.Vector3(0,13.05,4.18),
+  new THREE.Vector3(-1,13.3,4),
+  new THREE.Vector3(-3.71,13.6, 0.53),
+  new THREE.Vector3(-3.72,13, 0.53),
+]);
+
+ptc2topring.curveType = "chordal";
+
+const ptc2topringMesh = new THREE.Mesh(
+  new THREE.TubeGeometry(ptc2topring, 64, 0.08, 8, false),
+  new THREE.MeshStandardMaterial({ color: 0x595959, metalness: 1, roughness: 0.15 })
+);
+
+scene.add(ptc2topringMesh);
+
 // =================================================
 // Main Housing
 // =================================================
@@ -1396,7 +1413,7 @@ const brassFittingWire = new THREE.Mesh(
     })
 );
 
-//brassFitting.add(brassFittingWire);
+brassFitting.add(brassFittingWire);
 
 ptcheadgrp.add(brassFitting);
 
