@@ -194,11 +194,11 @@ function df_pipe(r,d, x, y, z) {
 
 //df pipes
 
-df_pipe(0.15, 11.4, 0.92, 0, -0.74);
+df_pipe(0.15, 11.7, 0.92, 0, -0.74);
 df_pipe(0.2, 0.1, 0.92, 0, -0.74);
 
-df_pipe(0.16, 11.4, -1.04, 0, 0.77);
-df_pipe(0.16, 11.4, 0.95, 0, 0.79);
+df_pipe(0.16, 11.7, -1.04, 0, 0.77);
+df_pipe(0.16, 11.7, 0.95, 0, 0.79);
 
 df_pipe(0.23, 0.1, -1.04, 0, 0.77);
 df_pipe(0.23, 0.1, 0.95, 0, 0.75);
@@ -273,14 +273,14 @@ topvaccum.position.set(0.6, 7.9, 0.7);
 const topvaccum2 = new THREE.CircleGeometry(0.25,32);
 const topvaccum2Mat = new THREE.MeshStandardMaterial({ color: 0x595959 , metalness: 1, roughness: 0.15 });
 const topvaccum2Mesh = new THREE.Mesh(topvaccum2, topvaccum2Mat);
-topvaccum2Mesh.position.set(0.6, 8., 0.7);
+topvaccum2Mesh.position.set(0.6, 8, 0.7);
 topvaccum2Mesh.rotation.x = -Math.PI / 2;
 //topflangGrp.add(topvaccum2Mesh);
 
-const vaccumcylinderGeo = new THREE.CylinderGeometry(0.1, 0.1, 0.35, 32);
+const vaccumcylinderGeo = new THREE.CylinderGeometry(0.1, 0.1, 0.3, 32);
 const vaccumcylinderMat = new THREE.MeshStandardMaterial({ color: 0x595959, metalness: 0.7, roughness: 0.45 });
 const vaccumcylinder = new THREE.Mesh(vaccumcylinderGeo, vaccumcylinderMat);
-vaccumcylinder.position.set(0.9, 8, 0.7);
+vaccumcylinder.position.set(0.9, 8.05, 0.7);
 topflangGrp.add(vaccumcylinder);
 const vaccumcylindertopassemble = new THREE.Group();
 const vaccumcylindertop = topvaccum.clone();
