@@ -393,6 +393,13 @@ create_topassemble(0.897,- 0.15, 0.34,0.3,1,0.3);
 create_topassemble(1.2,- 0.15, -0.02,0.3,1,0.3);
 create_topassemble(1.2, -0.15, -0.16,0.3,1,0.3);
 
+const extraconngrp = new THREE.Group();
+ //extraconngrp.add(sidebolts2.clone());
+ extraconngrp.add(sidebolttop3.clone());
+ topflangGrp.add(extraconngrp);
+ extraconngrp.position.set(1.063,2.42,-0.248);
+ extraconngrp.scale.set(0.7,0.7,0.7)
+
 
 
 
@@ -2085,20 +2092,26 @@ EFconend2.position.set(-1.3,0,0);
 
 EFconend2.rotation.z=Math.PI/2;
 //EFconnecting wire
-const EFwirePoints = [
-    new THREE.Vector3(1.95, 0, 0),   // Start from EFconnector end
-    new THREE.Vector3(2.3, 0.05, 0.2),
-    new THREE.Vector3(2.5, 0.05, 0.3),
-    new THREE.Vector3(2.8, 0.3, 0.6),
-    new THREE.Vector3(2.9, 0.7, 0.8),
-    new THREE.Vector3(3.8, 2.8, 1),
-     new THREE.Vector3(3.9, 3, 1),
-     new THREE.Vector3(3.92, 3.1, 1),
-     new THREE.Vector3(3.942, 3.19, 0.8),
 
+    const EFwirePoints = [
+    new THREE.Vector3(1.95, 0.00, 0.00),
+
+    new THREE.Vector3(2.25, 0.03, 0.12),
+    new THREE.Vector3(2.55, 0.12, 0.30),
+    new THREE.Vector3(2.80, 0.40, 0.60),
+    new THREE.Vector3(3.05, 0.95, 0.85),
+
+    new THREE.Vector3(3.55, 2.30, 0.98),
+    new THREE.Vector3(3.75, 2.75, 1.00),
+
+    // Straight entry into connector
+    new THREE.Vector3(3.88, 3.00, 1.00),
+   new THREE.Vector3(3.96, 3.15,1),
+    new THREE.Vector3(3.96, 3.17, 0.6),
+];
     // new THREE.Vector3(3.97, 3.1, 0.65),
     
-];
+
 
 const EFwireCurve = new THREE.CatmullRomCurve3(EFwirePoints);
 
@@ -2158,18 +2171,20 @@ for(let j=-0.4;j<=0.6;j+=0.4){
      EF3.position.set(j,1,1.2);
      EFAssembly.add(EF3);
 };
-const EFwirePoints2 = [
-    new THREE.Vector3(1.95, 2.05, 0),
-    new THREE.Vector3(2.5, 2.05, 0), 
-    new THREE.Vector3(2.9, 2.4, 0.2), 
-    new THREE.Vector3(3.2, 2.9, 0.4),
-    new THREE.Vector3(3.5, 3.3, 0.55),
-    //new THREE.Vector3(3.61, 3.57, 0.6),      // Start from EFconnector end
-    new THREE.Vector3(3.6, 3.58, 0.49), 
-    new THREE.Vector3(3.6, 3.64, 0.45),  
-    new THREE.Vector3(3.6, 3.64, 0.4), 
-     new THREE.Vector3(3.6, 3.64, 0.35),      // Start from EFconnector end
-    
+   const EFwirePoints2 = [
+    new THREE.Vector3(1.95, 2.05, 0.00),
+    new THREE.Vector3(2.45, 2.05, 0.00),   // straight
+
+    // start bending earlier
+    new THREE.Vector3(2.85, 2.18, 0.08),
+    new THREE.Vector3(3.15, 2.50, 0.20),
+    new THREE.Vector3(3.38, 2.90, 0.32),
+    new THREE.Vector3(3.52, 3.20, 0.38),
+
+    // almost straight into connector
+    new THREE.Vector3(3.58, 3.42, 0.46),
+    new THREE.Vector3(3.58, 3.6, 0.46),
+    new THREE.Vector3(3.61, 3.65, 0.31),
 ];
 
 const EFwireCurve2 = new THREE.CatmullRomCurve3(EFwirePoints2);
