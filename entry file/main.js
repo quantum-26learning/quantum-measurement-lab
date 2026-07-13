@@ -275,8 +275,6 @@ tf_cylinder(0.08,0.2,2.7,11.9,-0.3, Math.PI * 2);
 
 
 
-
-
 const topflangGrp = new THREE.Group();
 const topvaccumGeo = new THREE.CylinderGeometry(0.3, 0.3, 0.2, 32);
 const topvaccumMat = new THREE.MeshStandardMaterial({ color: 0x595959 , metalness: 1, roughness: 0.15 });
