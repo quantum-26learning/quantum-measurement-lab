@@ -102,49 +102,49 @@ function goldplate(r, hasHoles = false) {
     // ==========================================
     // CSG SPHERICAL INCISIONS (TOP AND BOTTOM)
     //==========================================
-    // const incisionRadius = 0.05;
-    // const spacing = 0.45; // Distance between incisions
+    const incisionRadius = 0.05;
+    const spacing = 0.45; // Distance between incisions
 
-    // // Base plate brush
-    // const plateBrush = new Brush(geometry);
-    // plateBrush.updateMatrixWorld();
+    // Base plate brush
+    const plateBrush = new Brush(geometry);
+    plateBrush.updateMatrixWorld();
 
-    // // Create a base cutter sphere
-    // const baseSphereGeo = new THREE.SphereGeometry(incisionRadius,6,6);
-    // const cutterGeometries = [];
+    // Create a base cutter sphere
+    const baseSphereGeo = new THREE.SphereGeometry(incisionRadius,6,6);
+    const cutterGeometries = [];
 
-    // // Generate grid of spherical incisions
-    // for (let x = -r; x <= r; x += spacing) {
-    //     for (let y = -r; y <= r; y += spacing) {
-    //         // Keep incisions inside the radius (with a small margin so they don't clip the edges)
-    //         if (x * x + y * y < (r - 0.2) * (r - 0.2)) {
-    //             // Top spherical incision (centered at z = depth)
-    //             const topSphere = baseSphereGeo.clone();
-    //             topSphere.translate(x, y, extrudesettings.depth);
-    //             cutterGeometries.push(topSphere);
+    // Generate grid of spherical incisions
+    for (let x = -r; x <= r; x += spacing) {
+        for (let y = -r; y <= r; y += spacing) {
+            // Keep incisions inside the radius (with a small margin so they don't clip the edges)
+            if (x * x + y * y < (r - 0.2) * (r - 0.2)) {
+                // Top spherical incision (centered at z = depth)
+                const topSphere = baseSphereGeo.clone();
+                topSphere.translate(x, y, extrudesettings.depth);
+                cutterGeometries.push(topSphere);
 
-    //             // Bottom spherical incision (centered at z = 0)
-    //             const botSphere = baseSphereGeo.clone();
-    //             botSphere.translate(x, y, 0);
-    //             cutterGeometries.push(botSphere);
-    //         }
-    //     }
-    // }
+                // Bottom spherical incision (centered at z = 0)
+                const botSphere = baseSphereGeo.clone();
+                botSphere.translate(x, y, 0);
+                cutterGeometries.push(botSphere);
+            }
+        }
+    }
 
-    // // Evaluate the CSG Subtraction if we have cutters
-    // if (cutterGeometries.length > 0) {
-    //     const mergedCutters = BufferGeometryUtils.mergeGeometries(cutterGeometries);
-    //     const cutterBrush = new Brush(mergedCutters);
-    //     cutterBrush.updateMatrixWorld();
+    // Evaluate the CSG Subtraction if we have cutters
+    if (cutterGeometries.length > 0) {
+        const mergedCutters = BufferGeometryUtils.mergeGeometries(cutterGeometries);
+        const cutterBrush = new Brush(mergedCutters);
+        cutterBrush.updateMatrixWorld();
 
-    //     const evaluator = new Evaluator();
-    //     const result = evaluator.evaluate(plateBrush, cutterBrush, SUBTRACTION);
+        const evaluator = new Evaluator();
+        const result = evaluator.evaluate(plateBrush, cutterBrush, SUBTRACTION);
 
-    //     // Replace our starting geometry with the CSG result
-    //     evaluator.useGroups = false;
-    //     geometry.dispose();
-    //     geometry = result.geometry;
-    // }
+        // Replace our starting geometry with the CSG result
+        evaluator.useGroups = false;
+        geometry.dispose();
+        geometry = result.geometry;
+    }
     // ==========================================
 
     const material = new THREE.MeshStandardMaterial({color: 0xd4af37, side: THREE.DoubleSide, roughness: 0.15, metalness: 1});
@@ -1184,6 +1184,8 @@ createBolt(0.75, 8, -1.7, 10.03, 0.2);
 createBolt(3, 15, 0, 11.95, 0);
 createBolt(0.8, 8, -1.7, 11.95, 0.2);
 createBolt(0.4, 4, -0.2, 10.1, -0.72);
+createBolt(0.9, 8, 1.5, 12.15, 0);
+createBolt(0.7, 8, 1.5, 12.95, 0);
 
 //PTC
 // =================================================
@@ -1397,34 +1399,8 @@ brassFitting.position.set(
    0.45,
    0
 );
-// Brass fitting wire curve
-    const brassFittingWireCurve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(1.79, 13.33, 3), // Start at brass fitting
-    new THREE.Vector3(1.79, 13.80, 3.50), // Straight section
-    new THREE.Vector3(1.85, 14.60, 3.55), // Gentle bend begins
-    new THREE.Vector3(2.10, 16.00, 3.80),
-    new THREE.Vector3(2.60, 18.00, 4.20),
-    new THREE.Vector3(3.20, 20.50, 4.80)  // Continue toward destination
-]);
-
-brassFittingWireCurve.curveType = "centripetal";
-brassFittingWireCurve.tension = 0.2;
-
-
-const brassFittingWire = new THREE.Mesh(
-    new THREE.TubeGeometry(brassFittingWireCurve, 100, 0.03, 12, false),
-    new THREE.MeshStandardMaterial({
-        color:'black',
-        metalness: 0.9,
-        roughness: 0.3
-    })
-);
-
-brassFitting.add(brassFittingWire);
 
 ptcheadgrp.add(brassFitting);
-
-
 
 // =================================================
 // Mounting Flange
@@ -1652,9 +1628,11 @@ for(let i = 0; i < 8; i++){
 
 const cryocase = new THREE.Group();
 const material = new THREE.MeshStandardMaterial({ color: 0xb87333, side: THREE.DoubleSide, metalness: 1, roughness: 0.15});
-// scene.add(cryocase)
+scene.add(cryocase)
+cryocase.scale.set(1.25, 1.25, 1.25)
+cryocase.position.set(-5,0,0)
 
-// Define structural tiers: [outerRadius, innerRadius, depth/height]
+// [outerRadius, innerRadius, depth/height]
 const tiers = [
   [2.6, 0.0, 0.2], // Solid base (closes the bottom)
   [2.6, 2.4, 3.8], // Bottom hollow section
@@ -1665,7 +1643,7 @@ const tiers = [
   [3, 2.7, 0.1]  // Top flange (open top)
 ];
 
-let currentY = 0;
+let currentY = -2.6;
 
 tiers.forEach(([outR, inR, height]) => {
   const shape = new THREE.Shape().absarc(0, 0, outR, 0, Math.PI * 2, false);
@@ -2946,7 +2924,12 @@ scene.add(floor);
 // ceiling.rotation.x = Math.PI / 2;
 // ceiling.position.set(0, 80, 0);
 
-
+//handle resize
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
 
 // =================================================
 // Animation
@@ -2959,7 +2942,11 @@ const mouse = new THREE.Vector2();
 // Define your animation states (same as before)
 let isOpen = false;
 const closedY = 0;      
-const openY = -15;      
+const openY = -15;     
+
+function setCryocaseState(open) {
+    isOpen = open;
+}
 
 // 2. Listen for clicks
 window.addEventListener('click', (event) => {
@@ -2993,9 +2980,9 @@ window.addEventListener('click', (event) => {
             currentObject = currentObject.parent;
         }
 
-        // YOUR ORIGINAL LOGIC: Toggle state only if the cryocase was part of the hit
+        // Clicking the cryocase itself no longer toggles the case; the buttons control it.
         if (hitCryocase) {
-            isOpen = !isOpen;
+            return;
         }
     }
 });
@@ -3007,6 +2994,7 @@ function animate() {
     const targetY = isOpen ? openY : closedY;
     cryocase.position.y += (targetY - cryocase.position.y) * 0.05;
 
+    controls.update();
     renderer.render(scene, camera);
 }
 
@@ -3014,27 +3002,29 @@ animate();
 
 // 7. Button Click Animations (GSAP)
 document.getElementById('btn-onetone').addEventListener('click', () => {
-    // 1. Move the camera
+    setCryocaseState(true);
+
     gsap.to(camera.position, {
-        x: -2, y: 2, z: 6,
-        duration: 1.5, ease: "power2.inOut"
+        x: -5, y: 0, z: 30,
+        duration: 1, ease: "power2.inOut"
     });
-   
-    // 2. Move the point the camera is looking at!
+
     gsap.to(controls.target, {
-        x: 0, y: 2, z: 0, // Adjust these coordinates to match the center of what you want to look at
-        duration: 1.5, ease: "power2.inOut"
+        x: -5, y: 5, z: 10,
+        duration: 1, ease: "power2.inOut"
     });
 });
 
 document.getElementById('btn-twotone').addEventListener('click', () => {
+    setCryocaseState(false);
+
     gsap.to(camera.position, {
-        x: 5, y: 4, z: 8,
-        duration: 1.5, ease: "power2.inOut"
+        x: -5, y: 20, z: 40,
+        duration: 1, ease: "power2.inOut"
     });
-   
+
     gsap.to(controls.target, {
-        x: 0, y: 4, z: 0,
-        duration: 1.5, ease: "power2.inOut"
+        x: -5, y: 4, z: 0,
+        duration: 1, ease: "power2.inOut"
     });
 });
