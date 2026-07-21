@@ -5,7 +5,8 @@ export default class GHS {
     constructor() {
         this.group = new THREE.Group();
         this.group.scale.set(11.7,11.7,9);
-        this.group.position.set(16,0.8,0);
+        this.group.position.set(-18,0.8,4);
+        this.group.rotation.y=-Math.PI/2;
         this.buildGHS();
     }
 

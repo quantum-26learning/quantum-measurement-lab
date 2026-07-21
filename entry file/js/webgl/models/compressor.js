@@ -4,8 +4,9 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
 export default class Compressor {
     constructor() {
         this.group = new THREE.Group();
-        this.group.position.set(25, 1,0.2);
-        this.group.scale.set(1,0.8,1);
+        this.group.position.set(-11, -4,-11);
+        this.group.rotation.y=-Math.PI/2;
+        //this.group.scale.set(1,0.8,1);
         this.buildCompressor();
     }
 
@@ -126,7 +127,54 @@ export default class Compressor {
           this.group.add(grillv);
         }
         
+         //  Pressure Gauge/Knob
+         const loader = new THREE.TextureLoader();
+         const knobGeom = new THREE.CylinderGeometry(0.55, 0.55, 0.1, 32);
+         const knobMat = new THREE.MeshBasicMaterial({
+         color:'white',
+         side: THREE.DoubleSide
+         });
+         const knob = new THREE.Mesh(knobGeom, knobMat);
+         knob.position.set(3.3, -1,2.5 );
+         knob.rotation.x =Math.PI/2;
+      
+         this.group.add(knob);
+
+         const knob2 = knob.clone();
+         knob2.position.x = 1.7;
+         this.group.add(knob2);
+         console.log("Texture loaded");
+         // Caster Wheels
+         function createWheel(x, z) {
+          const wheel = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.6, 0.6, 0.35, 16),
+          new THREE.MeshStandardMaterial({ color: 'black', metalness: 0.5, roughness: 0.5 })
+        );
+         wheel.rotation.z = Math.PI / 2;
+    
+         wheel.position.set(x, -3.3, z);
+         return wheel;
+        }
+         this.group.add(
+         createWheel(3.2, 1.7),
+         createWheel(-3.2, 1.7),
+         createWheel(3.2, -1.7),
+         createWheel(-3.2, -1.7)
+        );
+         // ring for the fornt side
+         for(let i = -3; i < 1; i+=0.05){
+         const compressorringGeom =new THREE.RingGeometry(0.1,0.2,16);
+         const compressorringMat =new THREE.MeshStandardMaterial({color:0x636A6E, metalness:1, roughness:0.15});
+         const compressorring = new THREE.Mesh(compressorringGeom,compressorringMat);
+         compressorring.rotation.z = Math.PI/2;
+         this.group.add(compressorring);
+         compressorring.position.set(3.3,-2 ,2.55+i*0.15);
+         const compressorring2=compressorring.clone();
+         this.group.add(compressorring2);
+        compressorring2.position.set(1.7, -2, 2.55+i*0.15);}
+
     }
+  
 
      getGroup(){
         return this.group;
