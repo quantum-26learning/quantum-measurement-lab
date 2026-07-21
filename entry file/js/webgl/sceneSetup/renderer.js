@@ -1,14 +1,40 @@
-import * as THREE from "three";
+// Draws the scene onto the canvas every frame.
 
-export function createRenderer(canvas) {
+import {WebGLRenderer} from "three";
 
-    const renderer = new THREE.WebGLRenderer({
-        canvas,
-        antialias: true
-    });
+export default class Renderer {
+    constructor(experience) {
+        this.experience = experience;
+        this.width = this.experience.wrapper.getBoundingClientRect().width;
+        this.height = this.experience.wrapper.getBoundingClientRect().height;
+        this.scene = experience.scene;
+        this.camera = experience.camera.camera;
+        this.renderer = new WebGLRenderer({
+            canvas: experience.canvas,
+            antialias: true
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        });
+        this.renderer.setSize(
+            this.width, this.height
+        );
+        this.renderer.setPixelRatio(
+            Math.min(window.devicePixelRatio, 2)
+        );
+    }
 
-    return renderer;
+    resize(width, height) {
+        this.renderer.setSize(
+            width, height
+        );
+        this.renderer.setPixelRatio(
+            Math.min(window.devicePixelRatio, 2)
+        );
+    }
+
+    update() {
+        this.renderer.render(
+            this.scene,
+            this.camera
+        );
+    }
 }

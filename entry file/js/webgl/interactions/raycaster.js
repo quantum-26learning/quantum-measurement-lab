@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { displayCoords } from './gui.js'; 
 
-export function setupRaycaster(camera, scene, cryocase) {
+export function setupRaycaster(camera, scene ) {
     // Instantiate these once outside the listener for better performance
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();

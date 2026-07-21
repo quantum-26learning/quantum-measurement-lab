@@ -12,8 +12,10 @@
     "vite": "^8.0.4"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
     "dat.gui": "^0.7.9",
     "gsap": "^3.15.0",
+    "tailwindcss": "^4.3.3",
     "three": "^0.184.0",
     "three-bvh-csg": "^0.0.18"
   }
