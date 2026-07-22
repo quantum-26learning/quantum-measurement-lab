@@ -70,7 +70,9 @@ export default class OPX {
       base.rotation.x = Math.PI / 2;
       const inside = new Mesh(new CylinderGeometry(0.025, 0.025, 0.045, 16), silverMat);
       inside.rotation.x = Math.PI / 2;
-      pGroup.add(base, inside);
+      const wire = new Mesh(new CylinderGeometry(0.01, 0.01, 0.075, 16), darkPlastMat)
+      wire.rotation.x = Math.PI / 2 ;
+      pGroup.add(base, inside, wire);
       pGroup.position.set(x, y, FRONT_SURFACE_Z);
       group.add(pGroup);
     }
