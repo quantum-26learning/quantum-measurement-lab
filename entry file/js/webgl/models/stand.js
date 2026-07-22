@@ -129,19 +129,18 @@ export default class Stand {
         
             const EFwirePoints = [
             new THREE.Vector3(1.95, 0.00, 0.00),
-        
-            new THREE.Vector3(2.25, 0.03, 0.12),
-            new THREE.Vector3(2.55, 0.12, 0.30),
-            new THREE.Vector3(2.80, 0.40, 0.60),
-            new THREE.Vector3(3.05, 0.95, 0.85),
-        
-            new THREE.Vector3(3.55, 2.30, 0.98),
-            new THREE.Vector3(3.75, 2.75, 1.00),
-        
+            new THREE.Vector3(1.95, 0.05, 0.00),
+            new THREE.Vector3(2.55, 0.08, 0.05),
+            new THREE.Vector3(2.80, 0.1, 0.08),
+            new THREE.Vector3(3.05, 0.1, 0.1),
+
+            new THREE.Vector3(3.55, 0.2, 0.2),
+            new THREE.Vector3(3.75,0.2, 0.3),
+
             // Straight entry into connector
-            new THREE.Vector3(3.88, 3.00, 1.00),
-           new THREE.Vector3(3.96, 3.15,1),
-            new THREE.Vector3(3.96, 3.17, 0.6),
+            new THREE.Vector3(3.88, 0.3, 0.5),
+            new THREE.Vector3(3.96, 3.1, 0.8),
+            new THREE.Vector3(3.96, 3.15, 0.6),
         ];
             // new THREE.Vector3(3.97, 3.1, 0.65),
             
@@ -210,14 +209,14 @@ export default class Stand {
             new THREE.Vector3(2.45, 2.05, 0.00),   // straight
         
             // start bending earlier
-            new THREE.Vector3(2.85, 2.18, 0.08),
-            new THREE.Vector3(3.15, 2.50, 0.20),
-            new THREE.Vector3(3.38, 2.90, 0.32),
-            new THREE.Vector3(3.52, 3.20, 0.38),
+            new THREE.Vector3(2.85, 2.08, 0.08),
+            new THREE.Vector3(3.3, 2.1, 0.1),
+            new THREE.Vector3(3.58, 2.90, 0.32),
+            new THREE.Vector3(3.58, 3.20, 0.38),
         
             // almost straight into connector
-            new THREE.Vector3(3.58, 3.42, 0.46),
-            new THREE.Vector3(3.58, 3.6, 0.46),
+            new THREE.Vector3(3.6, 3.42, 0.46),
+            new THREE.Vector3(3.6, 3.6, 0.46),
             new THREE.Vector3(3.61, 3.65, 0.31),
         ];
         
@@ -292,22 +291,25 @@ export default class Stand {
 
         ptc_headgrp.add(topRing);
 
-        // const ptc2topring = new THREE.CatmullRomCurve3([
-        // new THREE.Vector3(0.33,11.03,4.22),
-        // new THREE.Vector3(0,13.05,4.18),
-        // new THREE.Vector3(-1,13.3,4),
-        // new THREE.Vector3(-3.71,13.6, 0.53),
-        // new THREE.Vector3(-3.72,13, 0.53),
-        // ]);
+        const ptc2topring = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(2.8,8.64,1),
+        new THREE.Vector3(2.5,8.64,1),
+        new THREE.Vector3(2.1,8.7,1),
+        new THREE.Vector3(1.7,8.9,0.8),
+        new THREE.Vector3(1.6,8.9,0.6),
+        new THREE.Vector3(1.4,8.9,0.3),
+        new THREE.Vector3(1.1,8.8,0.2),
+        new THREE.Vector3(1.1,8.5,0.2),
+        ]);
 
-        // ptc2topring.curveType = "chordal";
+        ptc2topring.curveType = "chordal";
 
-        // const ptc2topringMesh = new THREE.Mesh(
-        // new THREE.TubeGeometry(ptc2topring, 64, 0.05, 8, false),
-        // new THREE.MeshStandardMaterial({ color: 0x595959, metalness: 1, roughness: 0.15 })
-        // );
+        const ptc2topringMesh = new THREE.Mesh(
+        new THREE.TubeGeometry(ptc2topring, 64, 0.02, 8, false),
+        new THREE.MeshStandardMaterial({ color: 0x595959, metalness: 1, roughness: 0.15 })
+        );
 
-        // this.group.add(ptc2topringMesh);
+        this.group.add(ptc2topringMesh);
 
         // =================================================
         // Main Housing

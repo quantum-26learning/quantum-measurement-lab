@@ -469,7 +469,7 @@ export default class GHS {
             new THREE.Vector3(-26, 1.5, 1.95)
           ]);
           const path2 = new THREE.CatmullRomCurve3([
-            new THREE.Vector3(-25, -1.0, 1.95),
+            new THREE.Vector3(-25, -2, 1.95),
             new THREE.Vector3(-25, 0.6, 1.95),
             new THREE.Vector3(-26, 0.6, 1.95)
           ]);
@@ -478,16 +478,18 @@ export default class GHS {
           const material = new THREE.MeshStandardMaterial({ color: 0xE7E7E7, side: THREE.DoubleSide, roughness: 0.15, metalness: 1 });
           const mesh1 = new THREE.Mesh(geometry1, material);
           const mesh2 = new THREE.Mesh(geometry2, material);
+          mesh2.position.set(-0.5,0,0);
+          mesh1.position.set(0.3,0,0);
           connector.add(mesh1);
           connector.add(mesh2);
         
           const collar1 = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.3, 32), new THREE.MeshStandardMaterial({ color: 0xb87333, side: THREE.DoubleSide, roughness: 0.15, metalness: 1 }));
-          collar1.position.set(-26, 1.5, 1.95);
+          collar1.position.set(-25.7, 1.5, 1.95);
           collar1.rotation.z = Math.PI / 2;
           connector.add(collar1);
         
           const collar2 = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.25, 0.3, 32), new THREE.MeshStandardMaterial({ color: 0xb87333, side: THREE.DoubleSide, roughness: 0.15, metalness: 1 }));
-          collar2.position.set(-26, 0.6, 1.95);
+          collar2.position.set(-26.4, 0.6, 1.95);
           collar2.rotation.z = Math.PI / 2;
           connector.add(collar2);
           connector.position.set(0.65, -0.14, 0.1);
@@ -501,7 +503,7 @@ export default class GHS {
         function dewar_pipe() {
             const pipe = new THREE.Group();
           const path1 = new THREE.CatmullRomCurve3([
-            new THREE.Vector3(-0.65, -0.018, 0.198),
+            new THREE.Vector3(-0.63, -0.018, 0.198),
             new THREE.Vector3(-0.8, -0.05, 0.2),
             new THREE.Vector3(-0.8, -0.1, 0.3),
             new THREE.Vector3(-0.7, -0.2, 0.4),
@@ -510,7 +512,7 @@ export default class GHS {
             new THREE.Vector3(-0.31, -0.28, 0.33),
           ]);
           const path2 = new THREE.CatmullRomCurve3([
-            new THREE.Vector3(-0.65, -0.09, 0.198),
+            new THREE.Vector3(-0.66, -0.085, 0.198),
             new THREE.Vector3(-0.8, -0.15, 0.2),
             new THREE.Vector3(-0.8, -0.25, 0.3),
             new THREE.Vector3(-0.7, -0.35, 0.4),

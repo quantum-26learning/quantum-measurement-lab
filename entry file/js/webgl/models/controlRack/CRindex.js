@@ -21,7 +21,7 @@ export default class ControlRack {
     componentSetUp(){
         this.controlRack = new Group()
         this.controlRack.scale.set(3.5,3.5,3.5);
-        this.controlRack.position.set(-30,-8,5);
+        this.controlRack.position.set(-20,-8,5);
 
         this.opx = new OPX();
         this.opx.group.position.set(0,3.5,0);

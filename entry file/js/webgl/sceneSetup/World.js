@@ -6,6 +6,7 @@ import PipeAssembly from "../models/pipeAssembly.js";
 import Stand from "../models/stand.js";
 import ControlRack from "../models/controlRack/CRindex.js";
 import Platform from "../models/Platform.js";
+import classicalComputer from "../models/classicalComp.js";
 
 
 export default class World {
@@ -29,6 +30,9 @@ export default class World {
 
         const controlRack = new ControlRack();
         this.scene.add(controlRack.getGroup());
+
+        const classicalComputerInstance = new classicalComputer();
+        this.scene.add(classicalComputerInstance.getGroup());
 
         const platform = new Platform();
         this.scene.add(platform.getGroup());
