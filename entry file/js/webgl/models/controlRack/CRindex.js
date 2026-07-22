@@ -1,6 +1,5 @@
 // Creates and adds all quantum lab controlRack into the scene.
 
-import * as THREE from "three";
 import OPX from "./OPX.js";
 import Octave from "./Octave.js";
 import Rack from "./Rack.js";
@@ -15,7 +14,8 @@ export default class ControlRack {
 
     constructor() {
         this.componentSetUp();
-        this.wireUpRack();
+        // this.wireUpRack();
+        this.getGroup();
     }
 
     componentSetUp(){
@@ -39,19 +39,21 @@ export default class ControlRack {
         this.controlRack.add(this.rack.group);
 
         this.vna = new VNA();
-        this.vna.group.position.set(0,1.5, 0);
+        this.vna.group.position.set(0,2.5, 0);
         this.vna.group.scale.set(0.4,0.5,0.5);
         this.controlRack.add(this.vna.group);
 
         this.resistanceBridge = new ThermometricUnit();
         this.resistanceBridge.group.position.set(0, 4.6,0);
         this.resistanceBridge.group.scale.set(0.055,0.055,0.055);
+        this.resistanceBridge.group.rotateX(-Math.PI/180);
         this.controlRack.add(this.resistanceBridge.group);
 
         this.oscilloscope = new Oscilloscope();
         this.oscilloscope.group.position.set(0,4.9,0.2);
         this.oscilloscope.group.scale.set(0.45,0.4,0.45);
         this.controlRack.add(this.oscilloscope.group)
+
     }
 
     wireUpRack() {
@@ -61,7 +63,7 @@ export default class ControlRack {
             new Vector3(0.718, 3.61, 0.73), 
             new Vector3(0.79, 4.10, 0.75),
             new Vector3(0.79, 4.15, 0.74) 
-
+            
         ];
         const OctaveToOPX = [
             new Vector3(0.718, 3.40, 0.72), 
@@ -125,41 +127,6 @@ export default class ControlRack {
             new Vector3(0.02, 3.975, 0.74)
         ]
 
-        const OctaveToRFSwitch1 = [
-            new Vector3(-0.480, 4.15, 0.74),
-            new Vector3(-0.480, 4.30, 0.75),
-            new Vector3(-0.605, 4.30, -0.90),
-            new Vector3(-0.605, 4.70, -0.65)   
-        ]
-        const OctaveToRFSwitch2 = [
-            new Vector3(-0.400, 4.15, 0.74),
-            new Vector3(-0.400, 4.30, 0.75),
-            new Vector3(-0.605, 4.30, -0.90),
-            new Vector3(-0.605, 4.60, -0.65)
-        ]
-
-        const OctaveToRFSwitch3 = [
-            new Vector3(-0.320, 4.15, 0.74),
-            new Vector3(-0.320, 4.30, 0.75),
-            new Vector3(-0.605, 4.30, -0.90),
-            new Vector3(-0.605, 4.50, -0.65)
-        ]
-
-        const VNAToRFSwitch1 = [
-            new Vector3(-0.645, 1.12, 0.65),
-            new Vector3(-0.645, 1.0, 0.75),
-            new Vector3(-0.345, 1.08, -0.90),
-            new Vector3(-0.345, 4.30, -0.90),
-            new Vector3(-0.345, 4.525, -0.65),
-        ]
-        const VNAToRFSwitch2 = [
-            new Vector3(0.245, 1.12, 0.65),
-            new Vector3(0.245, 1.0, 0.75),
-            new Vector3(0.230, 1.08, -0.90),
-            new Vector3(0.230, 4.30, -0.90),
-            new Vector3(0.200, 4.525, -0.65),
-        ]
-
         const OscilloscopeToOPX = [
             new Vector3(0.0, 4.99, 0.535),
             new Vector3(0.0, 4.99, 0.545),
@@ -185,8 +152,7 @@ export default class ControlRack {
             }
             else if(j>=1){
                 return 0.02
-            }
-
+            }        
         }
         for (let j = 0; j < Connection.length; j++) {
             let wire = new Wire(Connection[j], { 
@@ -194,8 +160,7 @@ export default class ControlRack {
                 thickness: getThickness(j) 
             });
             this.controlRack.add(wire.group);
-        }
-
+        }   
     }
 
     getGroup() {
