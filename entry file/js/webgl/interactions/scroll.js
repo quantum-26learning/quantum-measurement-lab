@@ -1,6 +1,5 @@
 // Animates camera or models based on page scroll using GSAP ScrollTrigger.
 
-
 import gsap from 'gsap'
 import ScrollTrigger from 'gsap/ScrollTrigger'
 
@@ -27,17 +26,26 @@ export default class Scroll{
                 invalidateOnRefresh: true
             }
         }).to(this.camera.position,{
-            x: 10,
-            y: 2,
-            z: 0
+            x: 0,
+            y: 15,
+            z: 60
         }).to(this.camera.position,{
-            x: 5,
-            y: 10,
+            x: 60,
+            y: 15,
             z: 0
         }).to(this.camera.position, {
-            x: 5,
-            y: 0,
-            z: -5
+            x: 0,
+            y: 15,
+            z: -60
+        }).to(this.camera.position, {
+            x: -60,
+            y: 15,
+            z: 0
+        }).to(this.camera.position, {
+            x: 0,
+            y: 15,
+            z: 60
         })
+
     }
 }
