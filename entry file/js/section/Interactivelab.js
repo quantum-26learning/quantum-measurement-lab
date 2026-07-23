@@ -40,7 +40,8 @@ export default class InteractiveLab{
     };
 
     createDesktop(){
-        this.element.className = 'min-h-screen w-screen mt-4 flex flex-col justify-center items-center text-text'
+        this.element.className = 'min-h-screen w-screen mt-4 flex flex-col justify-center items-center text-text';
+        this.element.id = 'lab';
         this.element.innerHTML = `
         <span class="px-4 py-1 rounded-full border border-border text-xs uppercase tracking-[0.3em] mt-4 mb-2">
             Laboratory
@@ -62,8 +63,8 @@ export default class InteractiveLab{
         `
         document.body.appendChild(this.element);
 
-        const canvasWrapper = document.querySelector('.canvas_wrapper');
-        const canvas = document.querySelector('.webgl');
+        const canvasWrapper = this.element.querySelector('.canvas_wrapper');
+        const canvas = this.element.querySelector('.webgl');
 
         return { canvasWrapper, canvas };
     };
