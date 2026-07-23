@@ -14,7 +14,7 @@ export default class ControlRack {
 
     constructor() {
         this.componentSetUp();
-        // this.wireUpRack();
+        this.wireUpRack();
         this.getGroup();
     }
 
@@ -59,106 +59,77 @@ export default class ControlRack {
     wireUpRack() {
 
         const OPXToOctave = [ 
-            new Vector3(0.718, 3.59, 0.72),
-            new Vector3(0.718, 3.61, 0.73), 
-            new Vector3(0.79, 4.10, 0.75),
-            new Vector3(0.79, 4.15, 0.74) 
+            new Vector3(0.789, 3.56, 0.68),
+            new Vector3(0.850, 3.89, 0.90),
+            new Vector3(0.800, 4.12, 0.68) 
             
         ];
         const OctaveToOPX = [
-            new Vector3(0.718, 3.40, 0.72), 
-            new Vector3(0.718, 3.42, 0.73), 
-            new Vector3(0.79, 3.965, 0.75),
-            new Vector3(0.79, 3.975, 0.74),  
+            new Vector3(0.789, 3.44, 0.68), 
+            new Vector3(0.750, 3.79, 0.90),
+            new Vector3(0.800, 3.97, 0.68),  
         ];
 
         const OPXToOctace1 = [
-            new Vector3(-0.795, 3.59, 0.72), 
-            new Vector3(-0.795, 3.61, 0.73), 
-            new Vector3(-0.480, 3.965, 0.75),
-            new Vector3(-0.480, 3.975, 0.74),
+            new Vector3(-0.610, 3.55, 0.68),  
+            new Vector3(-0.520, 3.89, 0.90),
+            new Vector3(-0.400, 3.96, 0.68),
         ]
         const OPXToOctace2 = [
-            new Vector3(-0.705, 3.59, 0.72),
-            new Vector3(-0.705, 3.61, 0.73), 
-            new Vector3(-0.400, 3.965, 0.75),
-            new  Vector3(-0.400, 3.975, 0.74)
+            new Vector3(-0.515, 3.55, 0.68), 
+            new Vector3(-0.450, 3.89, 0.90),
+            new  Vector3(-0.320, 3.96, 0.68)
         ]
         const OPXToOctace3 = [
-            new Vector3(-0.615, 3.59, 0.72),
-            new Vector3(-0.615, 3.61, 0.73), 
-            new Vector3(-0.320, 3.965, 0.75),
-            new Vector3(-0.320, 3.975, 0.74)
+            new Vector3(-0.425, 3.55, 0.68),
+            new Vector3(-0.350, 3.89, 0.90),
+            new Vector3(-0.240, 3.96, 0.68)
         ]
         const OPXToOctace4a = [
-            new Vector3(-0.08, 3.59, 0.72),
-            new Vector3(-0.08, 3.61, 0.73), 
-            new Vector3(-0.14, 4.14, 0.75),
-            new Vector3(-0.14, 4.15, 0.74)
+            new Vector3(0.110, 3.56, 0.68), 
+            new Vector3(0.140, 3.89, 0.90),
+            new Vector3(0.080, 4.12, 0.68)
         ]
         const OPXToOctace4b = [
-            new Vector3(-0.08, 3.40, 0.72),
-            new Vector3(-0.08, 3.42, 0.73), 
-            new Vector3(-0.14, 3.965, 0.75),
-            new Vector3(-0.14, 3.975, 0.74)
+            new Vector3(0.110, 3.44, 0.68), 
+            new Vector3(0.100, 3.79, 0.90),
+            new Vector3(0.080, 3.97, 0.68)
         ]
         const OPXToOctace5a = [
-            new Vector3(0.018, 3.59, 0.72),
-            new Vector3(0.018, 3.61, 0.73), 
-            new Vector3(-0.06, 4.14, 0.75),
-            new Vector3(-0.06, 4.15, 0.74)
+            new Vector3(0.200, 3.56, 0.68),
+            new Vector3(0.220, 3.89, 0.90),
+            new Vector3(0.160, 4.12, 0.68)
         ]
         const OPXToOctace5b = [
-            new Vector3(0.018, 3.40, 0.72),
-            new Vector3(0.018, 3.42, 0.73), 
-            new Vector3(-0.06, 3.965, 0.75),
-            new Vector3(-0.06, 3.975, 0.74)
+            new Vector3(0.200, 3.44, 0.68), 
+            new Vector3(0.180, 3.79, 0.90),
+            new Vector3(0.160, 3.97, 0.68)
         ]
         const OPXToOctace6a = [
-            new Vector3(0.108, 3.59, 0.72),
-            new Vector3(0.108, 3.61, 0.73), 
-            new Vector3(0.02, 4.14, 0.75),
-            new Vector3(0.02, 4.15, 0.74)
+            new Vector3(0.290, 3.56, 0.68),
+            new Vector3(0.320, 3.89, 0.90), 
+            new Vector3(0.240, 4.12, 0.68)
         ]
         const OPXToOctace6b = [
-            new Vector3(0.108, 3.40, 0.72),
-            new Vector3(0.108, 3.42, 0.73), 
-            new Vector3(0.02, 3.965, 0.75),
-            new Vector3(0.02, 3.975, 0.74)
+            new Vector3(0.290, 3.44, 0.68),
+            new Vector3(0.270, 3.79, 0.90), 
+            new Vector3(0.240, 3.97, 0.68)
         ]
 
-        const OscilloscopeToOPX = [
-            new Vector3(0.0, 4.99, 0.535),
-            new Vector3(0.0, 4.99, 0.545),
-            new Vector3(-0.685, 4.98, 0.60),
-            new Vector3(-0.685, 4.92, 0.90),
-            new Vector3(-0.685, 4.16, 0.90),
-            new Vector3(-0.685, 4.15, 0.72)
-        ]
+        // const OscilloscopeToOPX = [
+        //     new Vector3(0.0, 4.99, 0.535),
+        //     new Vector3(0.0, 4.99, 0.545),
+        //     new Vector3(-0.685, 4.98, 0.60),
+        //     new Vector3(-0.685, 4.92, 0.90),
+        //     new Vector3(-0.685, 4.16, 0.90),
+        //     new Vector3(-0.685, 4.15, 0.72)
+        // ]
+        // OscilloscopeToOPX,   
+        const Connection = [OPXToOctace1, OPXToOctace2, OPXToOctace3, OPXToOctace4a, OPXToOctace4b, OPXToOctace5a, OPXToOctace5b, OPXToOctace6a, OPXToOctace6b, OctaveToOPX, OPXToOctave]
 
-        const Connection = [OscilloscopeToOPX, OPXToOctace1, OPXToOctace2, OPXToOctace3, OPXToOctace4a, OPXToOctace4b, OPXToOctace5a, OPXToOctace5b, OPXToOctace6a, OPXToOctace6b, OctaveToOPX, OPXToOctave]
-
-        function getColor(j){
-            if (j ==  0){
-                return "#02b7db"
-            }
-            else if(j <=3  & j >= 1 ){
-                return "#00ffaa"
-            }
-        }
-        function getThickness(j){
-            if (j == 0 ){
-                return 0.035
-            }
-            else if(j>=1){
-                return 0.02
-            }        
-        }
+        
         for (let j = 0; j < Connection.length; j++) {
-            let wire = new Wire(Connection[j], { 
-                color: getColor(j), 
-                thickness: getThickness(j) 
-            });
+            let wire = new Wire(Connection[j]);
             this.controlRack.add(wire.group);
         }   
     }

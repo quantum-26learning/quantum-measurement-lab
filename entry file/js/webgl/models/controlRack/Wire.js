@@ -4,7 +4,7 @@ export default class Wire {
 
     constructor(cordinateList, options = {}) {
         this.cordinateList = cordinateList;
-        this.color = options.color || "#ffaa00";
+        this.color = options.color || "#0257db";
         this.thickness = options.thickness || 0.015;
         this.group = new THREE.Group();
         this.createWire();
