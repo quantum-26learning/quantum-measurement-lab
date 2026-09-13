@@ -82,6 +82,61 @@ export default class QubitCavity {
         return halfGroup;
     }
 
+buildTransmonChip() {
+        const chipWidth = 0.5;
+        const chipHeight = 0.25;
+        const chipThickness = 0.02;
+
+        const chipGeo = new THREE.BoxGeometry(chipWidth, chipHeight, chipThickness);
+        const chipMat = new THREE.MeshStandardMaterial({
+            color: 0x111122, // Dark glossy silicon substrate
+            metalness: 0.4,
+            roughness: 0.2
+        });
+        const qubitChip = new THREE.Mesh(chipGeo, chipMat);
+
+        const superconductorMat = new THREE.MeshStandardMaterial({
+            color: 0xecf0f1,
+            metalness: 1.0,
+            roughness: 0.1
+        });
+        
+        // Highlighted Josephson Junction material
+        const jjMat = new THREE.MeshStandardMaterial({
+            color: 0xff4444, 
+            metalness: 0.8,
+            emissive: 0x440000
+        }); 
+
+        const qubitgrp = new THREE.Group();
+
+        const layerZ = (chipThickness / 2) + 0.001; 
+
+        // 3. Transmon Qubit Capacitor Pads (Two large horizontal rectangles)
+        const padWidth = 0.11;
+        const padHeight = 0.07;
+        const padX = 0;
+        
+        const padGeo = new THREE.BoxGeometry(padWidth, padHeight, 0.002);
+        
+        const topPad = new THREE.Mesh(padGeo, superconductorMat);
+        topPad.position.set(padX, 0.035, layerZ);
+        
+        const bottomPad = new THREE.Mesh(padGeo, superconductorMat);
+        bottomPad.position.set(padX, -0.045, layerZ);
+
+        // 4. Josephson Junction (Non-linear inductor bridge connecting pads)
+        const jjGeo = new THREE.BoxGeometry(0.004, 0.015, 0.003);
+        const jj = new THREE.Mesh(jjGeo, jjMat);
+        jj.position.set(padX, -0.005, layerZ);
+
+        qubitgrp.add(topPad, bottomPad, jj);
+        qubitgrp.rotation.z = Math.PI / 2; 
+
+        qubitChip.add(qubitgrp);
+
+        return qubitChip;
+    }
     buildQubitcavity() {
         const copperMaterial = new THREE.MeshStandardMaterial({
             color: 0xb87333,
@@ -131,31 +186,8 @@ export default class QubitCavity {
         rightHalf.rotation.z = Math.PI / 2;
         rightHalf.scale.set(0.3, 0.3, 0.2);
 
-        const chipGeo = new THREE.BoxGeometry(0.5, 0.25, 0.02);
-        const chipMat = new THREE.MeshStandardMaterial({
-            color: 0x111122, // Dark glossy substrate
-            metalness: 0.4,
-            roughness: 0.2
-        });
-        const qubitChip = new THREE.Mesh(chipGeo, chipMat);
-
-        // Gold pads bridging to the cavity
-        const padGeo = new THREE.BoxGeometry(0.08, 0.26, 0.022);
-        const goldMat = new THREE.MeshStandardMaterial({
-            color: 0xd4af37,
-            metalness: 0.9,
-            roughness: 0.2
-        });
-        const leftPad = new THREE.Mesh(padGeo, goldMat);
-        leftPad.position.set(-0.21, 0, 0);
-        const rightPad = new THREE.Mesh(padGeo, goldMat);
-        rightPad.position.set(0.21, 0, 0);
-        
-        // Center qubit trace (just a tiny visual detail)
-        const traceGeo = new THREE.BoxGeometry(0.2, 0.02, 0.022);
-        const centerTrace = new THREE.Mesh(traceGeo, silverMaterial);
-
-        qubitChip.add(leftPad, rightPad, centerTrace);
+        // Integrate the detailed transmon circuit here
+        const qubitChip = this.buildTransmonChip();
 
         // The face of the cavity half in local space is at z = 0.5. 
         // We set the chip slightly above it to prevent z-fighting.
@@ -217,7 +249,6 @@ export default class QubitCavity {
             dummy.updateMatrix();
             sBarrelInstanced.setMatrixAt(sBarrelIdx++, dummy.matrix);
             
-
             dummy.position.set(px, py + 0.13, pz);
             dummy.updateMatrix();
             sHexInstanced.setMatrixAt(i, dummy.matrix);
@@ -235,7 +266,6 @@ export default class QubitCavity {
             dummy.rotation.set(Math.PI / 2, 0, 0);
             dummy.updateMatrix();
             sBarrelInstanced.setMatrixAt(sBarrelIdx++, dummy.matrix);
-
         }
 
         // --- 2. 90-Degree SMA Connectors (Face-Mounted) ---
@@ -274,10 +304,10 @@ export default class QubitCavity {
             raBarrelInstanced.setMatrixAt(raBarrelIdx++, dummy.matrix);
 
             if (i >= 2) {
-            dummy.position.set(px, py + 0.23, pz + 0.12);
-            dummy.rotation.set(0, 0, 0);
-            dummy.updateMatrix();
-            raTubeInstanced.setMatrixAt(i - 2, dummy.matrix);
+                dummy.position.set(px, py + 0.23, pz + 0.12);
+                dummy.rotation.set(0, 0, 0);
+                dummy.updateMatrix();
+                raTubeInstanced.setMatrixAt(i - 2, dummy.matrix);
             };
 
             dummy.position.set(px, py, pz + 0.12);
@@ -294,17 +324,9 @@ export default class QubitCavity {
             dummy.rotation.set(0, 0, 0);
             dummy.updateMatrix();
             raHexInstanced.setMatrixAt(raHexIdx++, dummy.matrix);        
-        
-        
         }
 
-        this.group.add(
-            flangeInstanced, sBarrelInstanced, sHexInstanced, ScrewInstanced,
-            raHexInstanced, raBarrelInstanced, elbowInstanced, raTubeInstanced
-        );
-
-
-this.smaGroup = new THREE.Group();
+        this.smaGroup = new THREE.Group();
         this.smaGroup.add(
             flangeInstanced, sBarrelInstanced, sHexInstanced, ScrewInstanced,
             raHexInstanced, raBarrelInstanced, elbowInstanced, raTubeInstanced

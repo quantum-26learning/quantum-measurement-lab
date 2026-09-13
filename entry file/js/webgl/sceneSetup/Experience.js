@@ -28,7 +28,7 @@ const CAMERA_TARGETS = {
     'plate_100mk': { pos: { x: -5, y: 3, z: 6 }, lookAt: { x: -5, y: 3, z: 0 } },
     'mixing_chamber': { pos: { x: -5, y: 0, z: 5 }, lookAt: { x: -5, y: 0, z: 0 } },
     'cavity': { pos: { x: -5, y: -5, z: 5 }, lookAt: { x: -5, y: -3, z: 0 } },
-    'qubit': { pos: { x: -4.8, y: -4, z: 2 }, lookAt: { x: -5, y: -3.5, z: 0 } },
+    'qubit': { pos: { x: -4.8, y: -4, z: 0.6 }, lookAt: { x: -4.8, y: -3.5, z: 0 } },
     'ControlRack': { pos: { x: -20, y: 5, z: 30 }, lookAt: { x: -20, y: 5, z: 20 } },
     'Thermometry': { pos: { x: -20, y: 8, z: 15 }, lookAt: { x: -20, y: 8, z: 5 } },
     'Octave': { pos: { x: -21, y: 2.5, z: 15 }, lookAt: { x: -20, y: 4, z: 5 } },

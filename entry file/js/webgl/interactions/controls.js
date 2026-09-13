@@ -28,7 +28,7 @@ export default class Controls {
         this.controls2.noZoom = false;
         this.controls2.zoomSpeed = 7.5;
         this.controls2.maxDistance = 45;
-        this.controls2.minDistance = 3;
+        this.controls2.minDistance = 0.5;
         
         const minPan = new Vector3(-15, -5, 0);
         const maxPan = new Vector3(15, 10, 0);
